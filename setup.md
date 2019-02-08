@@ -28,7 +28,7 @@ The [trajectory] was extracted from the [MDAnalysisTests]
 
 
 {% include links.md %}
-[trajectory]: ../data/protein.pdb
+[trajectory]: ./data/protein.pdb
 [MDAnalysisTests]: https://pypi.org/project/MDAnalysisTests/
 [MDAnalysis]: https://www.mdanalysis.org/
 [MDTraj]: http://mdtraj.org/1.9.0/
