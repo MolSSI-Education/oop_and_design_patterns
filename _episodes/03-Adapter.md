@@ -20,7 +20,7 @@ The first is when you would like to re-use pre-existing code that has been rigor
 The second is when you would like to create code that cares more about getting correct results for a set of inputs than how those results are generated.
 You may want to create a set of libraries that can generate the results, but you do not want to re-write your main class to suit each new library.
 The structure of an Adapter is shown in the figure below.
-![adapter](../fig/adapter.png)
+![adapter](../fig/Adapter.png)
 
 As an example, consider the situation where we would like to read a Molecular Dynamics (MD) trajectory from a PDB file and perform some analysis on it.
 We currently have an MD library in mind to use, but we may want to use one or more different libraries in the future.
