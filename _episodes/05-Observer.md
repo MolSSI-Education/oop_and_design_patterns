@@ -188,10 +188,6 @@ class Subject:
 class Observer(ABC):
 
     @abstractmethod
-    def __init__(self, print_freq=1):
-        pass
-
-    @abstractmethod
     def update(self, subject):
         pass
 
