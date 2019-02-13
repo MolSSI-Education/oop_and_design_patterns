@@ -3,12 +3,13 @@ title: 'Factory Design Pattern'
 teaching: 30
 exercises: 0
 questions:
-- 'How can we ?'
+- 'How can a method or class defer instantiation to subclasses?'
 objectives:
 - 'Learn the factory design pattern.'
 - 'See an example of the factory design pattern relavant to the Computational Molecular Sciences domain.'
 keypoints:
-- 'A factory allows .'
+- 'A factory allows writing subclasses that change the way an object
+is created.'
 - 'Factories promote SOLID design principles, enforcing code to be designed towards an interface instead of towards a specific class.'
 ---
 
@@ -23,11 +24,8 @@ objects.
 
 Imagine you are creating a Monte Carlo or molecular dynamics library. An
 important component of such library is the pairwise energy computation. You
-might be interested in implementing at least two potentials. The first one
-is the popular 12-6 Lennard-Jones potential, whose functional form is
-
-
-Additionally, you would like to use the Buckingham potential:
+might be interested in implementing at least two potentials: the 12-6
+Lennard-Jones potential and the Buckingham potential.
 
 You implement such functional forms using the following classes:
 
@@ -66,12 +64,12 @@ over time.
 
 ## Solution: the factory design pattern
 
-The Factory design pattern suggests to replace direct object construction calls
+The factory design pattern suggests to replace direct object construction calls
 (i.e. instantiating the LJ or Buckingham classes) with calls to a special
 method called a factory. This method returns instances of each potential class
 and hides the implementation of the potential classes.
 	
-The factory method for our simulation potentials could look like
+The factory method for our simulation potentials could look like:
 
 ~~~
 def potential_factory(potential_type, **kwargs):
@@ -87,7 +85,7 @@ def potential_factory(potential_type, **kwargs):
 ~~~
 {: .language-python}
 
-In this way, our client code can call our factory class as follows
+In this way, our client code can call our factory class as follows:
 
 ~~~
 buckingham_potential = potential_factory('Buckingham', A=4.0, rho=10.0, C=10)
@@ -122,8 +120,8 @@ consistent objects.  We are done with implementing our factory!
 ## Error handling
 
 We realize that the LJ and Buckingham potentials have different number of
-parameters. For our problem, the LJ potential has epsilon and sigma as
-parameters, while the Buckingham potential has A, C and rho. We can improve the
+parameters. For our problem, the LJ potential has two input 
+parameters, while the Buckingham potential has three. We can improve the
 usability of our library by adding the following checks in the potential
 constructors to make sure we input the right number of parameters and we use
 the desired keywords:
@@ -190,7 +188,7 @@ def potential_factory(potential_type, **kwargs):
         return Buckingham(kwargs)
 
     else:
-        raise Exception(“Potential type not found”)
+        raise Exception('Potential type not found')
 
 # Client code example below
 
@@ -209,7 +207,7 @@ def potential_factory(potential_type, **kwargs):
    cls_dict = dict(LJ=LJ, Buckingham=Buckingham)
 
    if potential_type not in cls_dict.keys():
-       raise Exception(“Potential type not found”)
+       raise Exception('Potential type not found')
 
    cls = cls_dict[potential_type]
 
@@ -231,6 +229,3 @@ coupled with a registry
 (http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
 and make the construction of the dictionary automatic and improve the
 extensibility of the potential library. 
-
-
-## Real world examples of factories
