@@ -101,10 +101,6 @@ function that retrieves what the observer knows about the subject.
 class Observer(ABC):
 
     @abstractmethod
-    def __init__(self, print_freq=1):
-        pass
-
-    @abstractmethod
     def update(self, subject):
         pass
 ~~~
