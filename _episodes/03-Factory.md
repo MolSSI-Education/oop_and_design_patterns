@@ -229,3 +229,51 @@ coupled with a registry
 (http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
 and make the construction of the dictionary automatic and improve the
 extensibility of the potential library. 
+
+> ## Exercise
+> How can we use a Factory to choose between our two Adapters from Lesson 2: Adapter Design Pattern?
+>> ## Solution
+>> We create a factory method that takes in an adapter name and a set of arguments.
+>> ~~~
+ def md_factory(md_toolkit, **kwargs):
+>> ~~~
+>> {: .language-python}
+>> We include a local dictionary to hold the different types of adapters.
+>> ~~~
+	md_toolkits = dict(MDTrajAdapter=MDTrajAdapter, MDAnalysisAdapter=MDAnalysisAdapter)
+>> ~~~
+>> {: .language-python}
+>> We then need to choose which class to build based on the type parameter, md_toolkit. If the type specified is not in our dictionary, we need to raise an exception to let the user know.
+>> ~~~
+	if md_toolkit not in md_toolkits.keys():
+		raise Exception('Toolkit not found.')
+	cls = md_toolkits[md_toolkit]
+>> ~~~
+>> {: .language-python}
+>> Finally, we need to create an instance of the class and return it.
+>> ~~~
+	cls_instance = cls(kwargs['filename'])
+	return cls_instance
+>> ~~~
+>> {: .language-python}
+>> Below we see the completed method.
+>> ~~~
+def md_factory(md_toolkit, **kwargs):
+	md_toolkits = dict(MDTrajAdapter=MDTrajAdapter, MDAnalysisAdapter=MDAnalysisAdapter)
+	if md_toolkit not in md_toolkits.keys():
+		raise Exception('Toolkit not found.')
+	cls = md_toolkits[md_toolkit]
+	cls_instance = cls(kwargs['filename'])
+	return cls_instance
+>> ~~~
+>> {: .language-python}
+>> We can now use our factory to choose between our adapters.
+>> ~~~
+	mda = md_factory('MDTrajAdapter', filename='protein.pdb')
+	#mda = md_factory('MDAnalysisAdapter', filename='protein.pdb')
+	print(mda.compute_center_of_mass())
+	print(mda.compute_radius_of_gyration())
+>> ~~~
+>> {: .language-python}
+> {: .solution}
+{: .challenge}
