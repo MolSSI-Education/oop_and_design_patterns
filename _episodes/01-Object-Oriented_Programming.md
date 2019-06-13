@@ -69,14 +69,14 @@ class Molecule:
 		self.charge = charge
 		self.symbols = symbols
 		
-	def print_molecule(self):
-		print('name: ', self.name, '\ncharge:', self.charge, '\nsymbols:', self.symbols)
+	def __str__(self):
+		return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
 		
 mol1 = Molecule('water dimer', 0.0, ["O", "H", "H"])
 mol2 = Molecule('He', 0.0, ["He"])
 
-mol1.print_molecule()
-mol2.print_molecule()
+print(mol1)
+print(mol2)
 ~~~
 {: .language-python}
 
@@ -108,10 +108,10 @@ The next three lines
 {: .language-python}
 set the value of the local object variables to the value of the parameters.
 
-The second method is simply printing our Molecule object, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification.
+The second method is simply a method to compute the string prepresentation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification.
 ~~~
-	def print_molecule(self):
-		print('name: ', self.name, '\ncharge:', self.charge, '\nsymbols:', self.symbols)
+	def __str__(self):
+		return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
 ~~~
 {: .language-python}
 
@@ -120,8 +120,8 @@ Finally, we need to create the instances of our Molecule class and call their pr
 mol1 = Molecule('water dimer', 0.0, ["O", "H", "H"])
 mol2 = Molecule('He', 0.0, ["He"])
 
-mol1.print_molecule()
-mol2.print_molecule()
+print(mol1)
+print(mol2)
 ~~~
 {: .language-python}
 
