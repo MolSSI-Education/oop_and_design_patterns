@@ -66,10 +66,10 @@ TODO: Develop sample class to create the multiple objects instead.
 
 ~~~
 class Molecule:
-	def __init__(self, name, charge, symbols):
-		self.name = name
-		self.charge = charge
-		self.symbols = symbols
+    def __init__(self, name, charge, symbols):
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
 ~~~
 {: .language-python}
 
@@ -84,7 +84,7 @@ is defining the name of the class as Molecule.
 We then have a method called a constructor and it is called whenever you are instantiating an object of the class.
 We have the definition of the constructor
 ~~~
-	def __init__(self, name, charge, symbols):
+    def __init__(self, name, charge, symbols):
 ~~~
 {: .language-python}
 that has three parameters: name, charge, and symbols.
@@ -92,9 +92,9 @@ The parameters of a constructor are required anytime you want to create an insta
 These can have default values if they are non-required.
 The next three lines
 ~~~
-		self.name = name
-		self.charge = charge
-		self.symbols = symbols
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
 ~~~
 {: .language-python}
 set the value of the local object variables to the value of the parameters. Here, the `self` syntax refers to the instance of the class. Any time you want to set or create a variable associated with a class in its definition, you use this syntax. 
@@ -125,7 +125,7 @@ water dimer
 {: .output}
 
 > ## Check your understanding
-> Create another instance of the class called `mol2`. This molecule should be and He molecule with 0 charge. After you have created this, print the molecule name and charge.
+> Create another instance of the class called `mol2`. This molecule should be an He molecule with 0 charge. After you have created this, print the molecule name and charge.
 >> ## Solution
 >> ~~~
 >> mol2 = Molecule(name="He", charge=0.0, symbols=["He"])
@@ -157,17 +157,17 @@ print(mol1)
 
 We can create a nicer representation for printing by writing a `__str__` method for the class. In Python, there are special methods associated with classes which you can use for customization. These are also called "magic" methods. They exist inside a class, and begin and end with two underscores (`__`). The `__init__` we have already used is a magic method used to set initial properties of a class instance. The `__str__` method is called by built-in Python functions `print()` and `format()`. The return value of this function *must* be a string. 
 
-The `__str__` method is simply a method to compute the string prepresentation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification. Let's add this to our class definition, making the whole definition look like the following
+The `__str__` method is simply a method to compute the string representation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification. Let's add this to our class definition, making the whole definition look like the following
 
 ~~~
 class Molecule:
-	def __init__(self, name, charge, symbols):
-		self.name = name
-		self.charge = charge
-		self.symbols = symbols
+    def __init__(self, name, charge, symbols):
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
 		
-	def __str__(self):
-		return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+    def __str__(self):
+        return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
 		
 mol1 = Molecule('water molecule', 0.0, ["O", "H", "H"])
 mol2 = Molecule('He', 0.0, ["He"])
@@ -202,14 +202,14 @@ Now anytime we wish to create a new molecule object and print out its values, we
 >> ## Solution
 >> ~~~
 >> class Molecule:
->>	def __init__(self, name, charge, symbols):
->>		self.name = name
->>		self.charge = charge
->>		self.symbols = symbols
->>		self.num_atoms = len(symbols)
+>>  def __init__(self, name, charge, symbols):
+>>      self.name = name
+>>      self.charge = charge
+>>      self.symbols = symbols
+>>      self.num_atoms = len(symbols)
 >>
->>	def __str__(self):
->>		return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+>>  def __str__(self):
+>>      return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
 >>
 >> mol1 = Molecule('water molecule', 0.0, ["O", "H", "H"])
 >>
@@ -224,9 +224,12 @@ Now anytime we wish to create a new molecule object and print out its values, we
 > {: .solution}
 {: .challenge}
 
+<!--
+## Composition
 
-
-
+-including objects of class types within a class is called composition.
+-We include instances of classes within
+-->
 ## Data Abstraction
 
 <!--- Private vs Public --->
@@ -248,14 +251,201 @@ The child class obtains the properties and behaviors of its parent unless it ove
 In coding terms, this means a class that inherits from a parent class by default will contain all of the data variables and methods of the parent class.
 The child class can either utilize the methods as is or they can override the methods to modify their behavior without affecting the parent class or any objects that have instantiated that class.
 
-Using inheritance in code development creates a hierarchy of objects, which often improves the readability of your code
+Using inheritance in code development creates a hierarchy of objects, which often improves the readability of your code.
 It also saves time end effort by avoiding duplicate code production, i.e., inheriting from classes that have similar behavior and modifying them instead of writting a new class from scratch.
 
-<!--- 
-Take our previous Molecule class as an example.
-We want to construct a new class for Molecules that prints with a different structure, however, assume we have code that utilized our original Molecule class, which means we cannot modify it.
-We will inherit our original class and modify the print method to meet our new needs.
---->
+Let us consider an example of a records system for a university.
+A university has a large number of people, whether they are students or faculty.
+We will start by creating some classes for each of these types of people.
+First is a student class, at its simplest, a student has a name, a surname, and maybe a set of courses that they are registered for. Lets create a student class that takes a name and surname as parameters.
+~~~
+class Student:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+        self.courses = []
+~~~
+{: .language-python}
+Methods that only act upon the students data should be contained by the student class, this helps structure the methods in a more readible and accessible way.
+Lets add three methods, a method to enroll a student in a course, a method to let the student drop a course, and the built in `__str__` method for the student class.
+~~~
+class Student:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+        self.courses = []
+
+    def enroll(self, new_course):
+        self.courses.append(new_course)
+~~~
+{: .language-python}
+It is often useful to generate a string representation of our class, so we want to override the built in method `__str__`.
+~~~
+class Student:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+        self.courses = []
+
+    def enroll(self, new_course):
+        self.courses.append(new_course)
+        
+    def __str__(self):
+        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+~~~
+{: .language-python}
+
+> ## Check your understanding
+> Add an additional method to the Student class to remove a course from the students enrolled courses.
+>> ## Solution
+>> ~~~
+>> class Student:
+>>   def __init__(self, name, surname):
+>>      self.name = name
+>>      self.surname = surname
+>>      self.courses = []
+>>
+>>  def enroll(self, new_course):
+>>      self.courses.append(new_course)
+>>
+>>  def drop_course(self, course):
+>>      self.courses.remove(course)
+>>
+>>  def __str__(self):
+>>      return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+>> ~~~
+>> {: .language-python}
+> {: .solution}
+{: .challenge}
+
+Similar to the student, lets build a Faculty class to represent the instructors of the university.
+Like the students, they have a name and a surname, but unlike the student they have a position denoting if they are a professor or lecturer and a salary.
+~~~
+class Faculty:
+    def __init__(self, name, surname, position, salary):
+        self.name = name
+        self.surname = surname
+        self.position = position
+        self.salary = salary
+        self.courses = []
+        
+    def __str__(self):
+        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+~~~
+{: .language-python}
+Like a student, a faculty has a set of courses, so we need to have methods to assign and unassign courses from their teaching load.
+~~~
+class Faculty:
+    def __init__(self, name, surname, position, salary):
+        self.name = name
+        self.surname = surname
+        self.position = position
+        self.salary = salary
+        self.courses = []
+        
+    def assign_course(self, new_course):
+        self.courses.append(new_course)
+    
+    def unassign_course(self, course):
+        self.courses.remove(course)
+        
+    def __str__(self):
+        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+~~~
+{: .language-python}
+Having built both a Student class and a Faculty class, notice the similarities between the two.
+For variable, both classes have a name, a surname, and a set of courses.
+For methods, both classes have a similar `__init__` method and a similar `__str__` method.
+What if we want to add a new method to both classes? Consider a university ID number; most, if not all, universities generate id numbers for their students, faculty, and staff to avoid ambiguity that can arise from similar names.
+
+If we want to add a new method to generate the id number of a given student or faculty, we have to add the method to both classes, which is duplicating the code in multiple places. This leads to more work for no tangible gain, not to mention, leads to multiple opportunities for mistakes to be made.
+We can use inheritance to combat these problems.
+We want to make a person class that contains the similarities of each class to act as their parent.
+~~~
+class Person:
+    def __init__(self, name, surname):
+        self.name = name
+        self.surname = surname
+        self.id = self.generate_id()
+    
+    def generate_id(self):
+        id_hash = 0
+        for s in self.name:
+            id_hash += ord(s)
+        for s in self.surname:
+            id_hash = id_hash * ord(s)
+        return id_hash % 1000000000
+    
+    def __str__(self):
+        return self.surname + ", " + self.name + "\tID: " + str(self.id)
+~~~
+{: .language-python}
+
+Now we can make the student class a child of the person class.
+~~~
+class Student(Person):
+    def __init__(self, name, surname):
+        self.courses = []
+        super().__init__(name, surname)
+    
+    def __str__(self):
+        return super().__str__() + "\nCourses:\n" + str(courses)
+        
+    def enroll(self, new_course):
+        self.courses.append(new_course)
+        
+    def drop_course(self, course):
+        self.courses.remove(course)
+~~~
+{: .language-python}
+In both the `__init__` and `__str__` methods, we are using `super()`, which references the parent class of student, in this case Person, and calls the `__init__` and `__str__` methods to help initialize the class.
+`super().__init__(name,surname)` tells python to call the `__init__` method of the parent class to initialize the name and surname variables. Now any changes to Person's `__init__` will also update the Student's `__init__`.
+
+> ## Check your understanding
+> Update the Faculty class to use the Person class as a parent.
+>> ## Solution
+>> ~~~
+>> class Faculty(Employee):
+>>  def __init__(self, name, surname, position, salary):
+>>      self.position = position
+>>      self.salary = salary
+>>      self.courses = []
+>>      super().__init__(name, surname)
+>>  
+>>  def __str__(self):
+>>      return super().__str__() + "\nCourses:\n" + self.courses
+>>  
+>>  def assign_course(self, new_course):
+>>      self.courses.append(new_course)
+>>  
+>>  def unassign_course(self, course):
+>>      self.courses.remove(course)
+>> ~~~
+>> {: .language-python}
+> {: .solution}
+{: .challenge}
+
+We initially created the person class to simplify the method to generate ids, but that method is not present in either class.
+This is because both classes inherit the generate_id method from the Person class. Since they are not modifying the method, it does not need to appear within either child.
+However, we can test the method to make sure it is working.
+~~~
+student1 = Student("John", "Smith")
+print(student1)
+~~~
+{: .language-python}
+gives the output:
+~~~
+Smith, John	ID: 546320160
+Courses:
+[]
+~~~
+{: .language-output}
+The generate_id method is called in the `__init__` method of Person, so each Student and Faculty will autimatically generate their id upon initialization.
+
+We can create further classes that inherit from person to cover different people at the university, such as Staff.
+
+## Composition
+TODO: Create a courses class and utilize it in Student and Faculty to hold more sophisticated course information/functionality.
 
 ### Interfaces and Abstract Classes
 An interface is a way to define how a class will be designed without implementing any of the methods.
