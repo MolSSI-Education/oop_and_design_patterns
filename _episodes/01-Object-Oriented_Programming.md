@@ -405,7 +405,7 @@ In both the `__init__` and `__str__` methods, we are using `super()`, which refe
 > Update the Faculty class to use the Person class as a parent.
 >> ## Solution
 >> ~~~
->> class Faculty(Employee):
+>> class Faculty(Person):
 >>  def __init__(self, name, surname, position, salary):
 >>      self.position = position
 >>      self.salary = salary
