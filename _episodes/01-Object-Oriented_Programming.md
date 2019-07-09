@@ -405,7 +405,7 @@ In both the `__init__` and `__str__` methods, we are using `super()`, which refe
 > Update the Faculty class to use the Person class as a parent.
 >> ## Solution
 >> ~~~
->> class Faculty(Employee):
+>> class Faculty(Person):
 >>  def __init__(self, name, surname, position, salary):
 >>      self.position = position
 >>      self.salary = salary
@@ -444,8 +444,14 @@ The generate_id method is called in the `__init__` method of Person, so each Stu
 
 We can create further classes that inherit from person to cover different people at the university, such as Staff.
 
-## Composition
-TODO: Create a courses class and utilize it in Student and Faculty to hold more sophisticated course information/functionality.
+### Composition and Aggregation
+In addition to primitive types, variables in a class can be instances of different classes.
+This can often be useful to group relevant data together within a class, such as the molecule class in the Encapsulation lesson, or because a class needs to have ownership of other objects.
+There are two different forms that this can take, Composition and Aggregation.
+The main difference is the ownership of the object.
+
+Consider the university example we have been using. A university has a large number of students and faculty, but they are not owned by the university. If the university closes, the students and faculty still exist, they just attend or work for a different university. A university is an aggregation of students and faculty.
+A university owns courses, if the university closes then the courses cease to exist. A university is composed of courses.
 
 ### Interfaces and Abstract Classes
 An interface is a way to define how a class will be designed without implementing any of the methods.
