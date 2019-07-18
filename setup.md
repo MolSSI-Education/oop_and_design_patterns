@@ -23,7 +23,7 @@ We are utilizing two Molecular Dynamics packages to show examples of some of the
 [MDanalysis] and [MDTraj] are both available through conda-forge.
 
 To start, open an Anaconda prompt.
-Then enter `conda create --name design_patterns`.
+Then enter `conda create --name design_patterns python=3.7`.
 Enter `Y` to continue.
 
 We now need to activate our new environment.
@@ -44,16 +44,6 @@ Then we will install MDAnalysis and MDTraj.
 We have included a sample trajectory file to use with the example design patterns.
 The [trajectory] was extracted from the [MDAnalysisTests]
 
-## Open the Terminal Window
-- Windows:  Click Windows Key + R, type cmd, press Enter.
-- MacOS: The Terminal application can be found in Applications -> Utilities -> Terminal.
-
-## Start a Jupyter notebook
-In the Terminal window, type
-```
-$ jupyter notebook
-```
-It may take a few seconds to load the page, especially if it is the first time you have ever used the jupyter notebook, so don't panic if nothing loads for a few seconds.  Then a new window should open in your default internet browser. Use the file navigation window to navigate to the `cms-workshop` folder.  In the upper right hand corner, click New, then choose Python 3 from the dropdown list.  You're ready to go!
 
 {% include links.md %}
 [trajectory]: ./data/protein.pdb
