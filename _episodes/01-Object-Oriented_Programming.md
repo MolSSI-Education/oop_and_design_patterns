@@ -235,7 +235,17 @@ Now anytime we wish to create a new molecule object and print out its values, we
 ## Data Abstraction
 
 <!--- Private vs Public --->
-Data abstraction is the concept of hiding variables behind methods to simplify code, increase development efficiency and improve security.
+<!--Data abstraction is the concept of hiding variables behind methods to simplify code, increase development efficiency and improve security. -->
+
+Data abstraction is the concept of hiding implementation details from the user, allowing them to know how to use the code/class not how it actually works or implemented. For example,  when you use a Coffee machine, you interact with its interface, but you don't actually know how it is preparing the coffee inside. Another example is that when a Web browser connects to the Internet, it interacts with the Operating system to get the connection, but it doesn't know if you are connecting using a dial-up or a wifi.
+
+Clearly there are many benefits of data abstraction:
+1.Can have multiple implementations
+2.Can build complex software by splitting functionality internally into steps, and only exposing one method to the user
+3.Change implementation later without affecting the user
+4.Easier code collaboration since developers don't need to know the details of every class, only how to use it.
+
+In Python, data abstraction can be achieved by Abstract classes and the use of private and public attributes and methods.
 
 
 Generally, variables can be public, in which case they are directly modifiable, or private, meaning interaction with their values is only possible through internal class methods.
