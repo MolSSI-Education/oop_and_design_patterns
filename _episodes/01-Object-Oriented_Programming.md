@@ -21,7 +21,7 @@ This introduction will briefly cover each of these concepts and why they are use
 
 
 ## Encapsulation
-Encapsulation is the concept of enclosing the data and methods within a class.
+Encapsulation is the concept of enclosing related data and methods acting on those data within a single unit called a class.
 A class will consist of a set of data (variables) and a set of methods that interact with the data.
 There are a number of benefits to creating classes.
 1. It aids in the understanding of the code being developed.
@@ -30,6 +30,8 @@ It means all of the information about that object is grouped into a single locat
 2. As an extension of the first benefit, anyone developing code that utilizes your objects will have a clear understanding of how they are allowed to interact with it.
 The methods they can use will be located within the class of the object.
 3. It promotes security of data by restricting the ways to access data to the specific methods within the class.
+4. Methods have full access to their data so that you don’t have to keep passing data and parameters between methods. Also, this way, you avoid the use of global variables.
+
 
 Classes are used in code to provide a general definition of an object.
 We call an object an instance of a class, meaning it takes the structure of the class and fills in any necessary data.
