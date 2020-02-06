@@ -13,7 +13,7 @@ objectives:
 
 ## Problem
 
-This example will build off of the composite [design pattern example] (https://molssi-education.github.io/oop_and_design_patterns/07-Composite/index.html). 
+This example will build off of the composite [design pattern example](https://molssi-education.github.io/oop_and_design_patterns/07-Composite/index.html). 
 
 Imagine you would like to add a solid body rotation Monte Carlo move to your program.
 As you start modifying your code, you'll realize that you need to modify your Component
