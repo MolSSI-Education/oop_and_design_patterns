@@ -26,7 +26,7 @@ during the course of a simulation (i.e. clusters are not created or destroyed
 frequently). To reproduce the correct statistics, it is necessary to 
 design and use algorithms that more efficiently sample
 configurations of the ensemble of interest. Cluster moves are one tool
-to give more rapid sampling of aggregate configurations. 
+to accelerate sampling of aggregate configurations. 
 
 In a typical cluster move, you might find two kinds of objects: particles and 
 clusters. Particles are elements that tend to aggregate
