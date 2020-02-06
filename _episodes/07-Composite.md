@@ -80,16 +80,28 @@ class Component(ABC):
 {: .language-python}
 
 2. Leaf. These are objects that have no children. They implement methods 
-described by the Component parent class. Patchy particles, LJ particles
-or Gay Berne particles might serve as leaf objects.
+described by the Component parent class. LJ particles, 
+Gay Berne or any other type of particle might serve as leaf objects.
 
 ~~~
-class Patchy(Component):
+class Sphere(Component):
 
-    '''A patchy particle is a type of particle.'''
+    '''A Sphere is a type of particle, for instance,
+    point particles with Lennard-Jones potential.
+    This is a leaf in the pattern.'''
 
     def translate(self):
-        print('translating patchy particle')
+        print('translating sphere')
+
+class Gay_Berne(Component):
+
+    '''A Gay Berne particle is an anisotropic model
+    of the 12-6 Lennard-Jones potential. It is used
+    exstensively to model liquid crystals. Another
+    leaf in the pattern'''
+
+    def translate(self):
+        print('translating gay berne')
 ~~~
 {: .language-python}
 
