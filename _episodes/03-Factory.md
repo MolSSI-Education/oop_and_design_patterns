@@ -65,38 +65,104 @@ class MDTrajAdapter(TrajectoryAdapter):
 ~~~
 {: .language-python}
 
-First we will want to create a class for out factory:
+First we will want to create a new module for our factory, called `factory.py`.
+We need to first import our adapter abstract class so our factory knows which type of objects it is building.
+
 ~~~
-class TrajectoryAnalysisFactory():
+from .trajectoryadapter import TrajectoryAdapter
 ~~~
 {: .language-python}
-We simply construct a class with a reasonable name for our factory.
-We do not need to create an `__init__` method currently, since we do not have and class attributes, the default `__init__` method is sufficient.
 
-## Error handling
+Then we create a funciton that will act as our factory. We want this function to take in arguments for our adapters, along with a label so it knows which adapter to create.
 
-We realize that the LJ and Buckingham potentials have different number of
-parameters. For our problem, the LJ potential has two input 
-parameters, while the Buckingham potential has three. We can improve the
-usability of our library by adding the following checks in the potential
-constructors to make sure we input the right number of parameters and we use
-the desired keywords:
+~~~
+def trajectory_factory(trajectory_toolkit, **kwargs):
+~~~
+{: .language-python}
+There are a number of ways we can handle this method, the first way will simply use a series of if statements to determine which adapter needs to be used.
+~~~
+def trajectory_factory(trajectory_toolkit, **kwargs):
+    if trajectory_toolkit == 'MDTraj':
+        traj_analysis = MDTrajAdapter(kwargs['filename'])
+    elif trajectory_toolkit == 'MDAnalysis':
+        traj_analysis = MDAnalysisAdapter(kwargs['filename'])
+    else:
+        raise TypeError('Toolkit not found')
+~~~
+{: .language-python}
+An alternative option, that looks a little cleaner is to use dictionaries.
+~~~
+def trajectory_factory(trajectory_toolkit, **kwargs):
+    traj_toolkits = {'MDTraj': MDTrajAdapter, 'MDAnalysis': MDAnalysisAdapter}
+    
+    if trajectory_toolkit not in traj_toolkits.keys():
+        raise TypeError('Toolkit not found')
+    
+    traj_analysis = traj_toolkits[trajectory_toolkit](kwargs['filename'])
+    
+    return traj_analysis
+~~~
+{: .language-python}
 
+Both of these options will work, however, there is a slight problem. They are very rigid and inflexible. We are using a factory so our code can remain open to further extension, further adapters being written. The current factory needs to be modified every time an adapter is written or sufficiently changed. We can solve this issue through the use of a registry.
 
-We can write a similar piece of code for the Buckingham potential.
+We start with the dictionary based factory, and simply move the dictionary to be an empty list, outside of the function, and update our references to it, making our module look like this:
+~~~
+from .trajectoryadapter import TrajectoryAdapter
+
+_toolkits = {}
+
+def trajectory_factory(trajectory_toolkit, **kwargs):
+    traj_toolkits = {'MDTraj': MDTrajAdapter, 'MDAnalysis': MDAnalysisAdapter}
+    
+    if trajectory_toolkit not in _toolkits.keys():
+       raise TypeError('Toolkit not found')
+    
+    traj_analysis = _toolkits[trajectory_toolkit](kwargs['filename'])
+    
+    return traj_analysis
+~~~
+{: .language-python}
+
+We can now create a new method that acts on this dictionary to register our toolkits.
+~~~
+def register(toolkit_name, toolkit_class):
+    if not issubclass(toolkit_class, TrajectoryAdapter):
+        raise TypeError('{0} is not a TrajectoryAdapter'.format(toolkit_class))
+    _toolkits[toolkit_name] = toolkit_class
+~~~
+{: .language-python}
+Here we first check that the toolkit being registered is a subclass of our `TrajectoryAdapter`, this ensures that it has the proper methods implemented within it. We then simply add it to the dictionary.
+
+The final step is to make each of our current toolkits register themselves into the factory. Within our adapter module, we simply import the `register` method and use it for each adapter.
+~~~
+from .factory import register
+
+register('MDTraj', MDTrajAdapter)
+register('MDAnalysis', MDAnalysisAdapter)
+~~~
+{: .language-python}
+
+Now any time a new adapter is created, it can be added to the factory without any modifications outside of its own module, it just imports the register function and utilizes it.
 
 ## Final code
+The final code for the `factory` module is included here for clarity.
+~~~
+from .trajectoryadapter import TrajectoryAdapter
 
-The first line of our function creates a dictionary whose values are classes of
-potentials. Note that these have not been instantiated yet. After an if
-statements that handles errors, we choose the correct class from the dictionary
-using the input arguments to our function. The cls variable contains the class
-of potential that we need. The line cls(kwargs) instantiates the class with the
-provided arguments (i.e. sigma or epsilon for LJ or A, C and rho for
-Buckingham).
+_toolkits = {}
 
-One advantage of using dictionaries over if statements is that they can be
-coupled with a registry
-(http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
-and make the construction of the dictionary automatic and improve the
-extensibility of the potential library. 
+def register(toolkit_name, toolkit_class):
+    if not issubclass(toolkit_class, TrajectoryAdapter):
+        raise TypeError('{0} is not a TrajectoryAdapter'.format(toolkit_class))
+    _toolkits[toolkit_name] = toolkit_class
+
+def trajectory_factory(trajectory_toolkit, **kwargs):
+    if trajectory_toolkit not in _toolkits.keys():
+       raise TypeError('Toolkit not found')
+       
+    traj_analysis = _toolkits[trajectory_toolkit](kwargs['filename'])
+    
+    return traj_analysis
+~~~
+{: .language-python}

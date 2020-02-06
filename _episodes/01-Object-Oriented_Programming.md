@@ -246,15 +246,52 @@ Clearly there are many benefits of using data abstraction:
 4. Easier code collaboration since developers don't need to know the details of every class, only how to use it.
 5. One of the main concepts that makes the code flexible and maintainable.
 
-In Python, data abstraction can be achieved by Abstract classes and the use of private and public attributes and methods.
+In Python, data abstraction can be achieved by the use of private and public attributes and methods.
 
 
 Generally, variables can be public, in which case they are directly modifiable, or private, meaning interaction with their values is only possible through internal class methods.
 In python, there are no explicitly public or private variables, all variables are accessible within an object.
 However, the predominantly accepted practice is to treate names prefixed with an underscore as non-public. (See [Python Private Variables](https://docs.python.org/3/tutorial/classes.html#private-variables))
 
-<!--- TODO come up with a code example here --->
-<!--- TODO Do something to show the differences in interacting with variables through the variable itself and through getters/setters. --->
+The best way to achieve data abstraction in python is to use the '@property' decorator, and the 'setter' decorator. These allow attributes to be used in a pythonic way, while allowing more control over their values.
+Consider our Molecule class:
+~~~
+ class Molecule:
+  def __init__(self, name, charge, symbols):
+      self.name = name
+      self.charge = charge
+      self.symbols = symbols
+      self.num_atoms = len(symbols)
+
+  def __str__(self):
+      return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+~~~
+{: .language-python}
+
+We already can see a prime candidate for this approach in our 'symbols' and 'num_atoms'. Since 'num_atoms' is based on the number of symbols, we dont want the user to modify it, and in addition, we want to update it whenever the number of symbols is updated. We can do this by creating a property and setter method for the 'symbols' variable.
+~~~
+class Molecule:
+    def __init__(self, name, charge, symbols):
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
+        self.num_atoms = len(symbols)
+
+    @property
+    def symbols(self):
+        return self._symbols
+        
+    @symbols.setter
+    def symbols(self, symbols):
+        self._symbols = symbols
+        self.num_atoms = len(symbols)
+
+    def __str__(self):
+        return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+~~~
+{: .language-python}
+
+Now, whenever someone tries to access 'symbols', it will properly return the value stored in our private variable. When someone tries to update the value of symbols directly, it will update the private variable, and also update the 'num_atoms' variable.
 
 ## Inheritance
 Inheritance is the principle of extending a class to add capabilities without modifying the original class.
@@ -367,7 +404,7 @@ class Faculty:
 ~~~
 {: .language-python}
 Having built both a Student class and a Faculty class, notice the similarities between the two.
-For variable, both classes have a name, a surname, and a set of courses.
+For variables, both classes have a name, a surname, and a set of courses.
 For methods, both classes have a similar `__init__` method and a similar `__str__` method.
 What if we want to add a new method to both classes? Consider a university ID number; most, if not all, universities generate id numbers for their students, faculty, and staff to avoid ambiguity that can arise from similar names.
 
