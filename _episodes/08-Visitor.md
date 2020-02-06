@@ -35,15 +35,30 @@ class Component(ABC):
     def rotate(self):
 	pass
 
-class Patchy(Component):
+class Sphere(Component):
 
-    '''A patchy particle is a type of particle.'''
+    '''A Sphere is a type of particle, for instance,
+    point particles with Lennard-Jones potential.
+    This is a leaf in the pattern.'''
 
     def translate(self):
         print('translating sphere')
 
     def rotate(self):
-	pass
+	print('rotating sphere')
+
+class Gay_Berne(Component):
+
+    '''A Gay Berne particle is an anisotropic model
+    of the 12-6 Lennard-Jones potential. It is used
+    exstensively to model liquid crystals. Another
+    leaf in the pattern'''
+
+    def translate(self):
+        print('translating gay berne')
+
+    def rotate(self):
+	print('translating gay berne')
 
 class Cluster(Component):
 
@@ -142,17 +157,17 @@ simply not implement it, raise an exception, or do whatever you want (for instan
 the rotation move for a sphere).
 
 3. Visitable: is an abstraction which defines the method that will allow a children
-object to be visited. In our example this would simply be an abtract Particle
+object to be visited. In our example this would simply be an abtract Component 
 class that defines a generic transform method.
 
 ~~~
-class Particle(ABC):
+class Component(ABC):
 
     '''Base class for a Particle. Particles
     can be translated, rotated, reflected, etc'''
 
     @abstractmethod
-    def transform(self, transformer):
+    def move(self, transformer):
         pass
 ~~~
 {: .language-python}
@@ -162,13 +177,13 @@ that the visitor object is an argument that is passed to the generic function tr
 generic function has to be implemented in each particle type. 
 
 The function move requires as argument an instance of a class Particle, as required
-by the abstract Move_Type class. For instance, 
+Particleby the abstract Move_Type class. For instance, 
 instance, the Translator.sphere method needs an instance
 of the Sphere class. This instance is provided in Sphere.move class by the object self, which
 represent the current object instance.
 
 ~~~
-class Sphere(Particle):
+class Sphere(Component):
 
     '''A Sphere is a type of particle, for instance, 
     point particles with Lennard-Jones potential'''
@@ -176,7 +191,7 @@ class Sphere(Particle):
     def move(self, transformer):
         transformer.sphere(self) 
 
-class Gay_Berne(Particle):
+class Gay_Berne(Component):
 
     '''A Gay Berne particle is an anisotropic model
     of the 12-6 Lennard-Jones potential. It is used
@@ -193,7 +208,7 @@ In can be a complex structure, such
 as a composite object
 
 ~~~
-class Cluster(Particle):
+class Cluster(Component):
 
     '''A cluster is a collection of particles. It can
     be composed of spherical, anisotropic, patchy or 
@@ -226,17 +241,17 @@ def main():
     cluster.add_particle(argon)
     cluster.add_particle(krypton)
 
-    argon.transform(translate)
-    argon.transform(rotate)
+    argon.move(translate)
+    argon.move(rotate)
 
-    krypton.transform(translate)
-    krypton.transform(rotate)
+    krypton.move(translate)
+    krypton.move(rotate)
 
-    liquid_crystal.transform(translate)
-    liquid_crystal.transform(rotate)
+    liquid_crystal.move(translate)
+    liquid_crystal.move(rotate)
 
-    cluster.transform(translate)
-    cluster.transform(rotate)
+    cluster.move(translate)
+    cluster.move(rotate)
 
 if __name__ == "__main__":
     main()
@@ -250,15 +265,13 @@ and sometimes nullyfing the need for design patterns as described in the
 classic book Design Patterns: Elements of Object-Oriented Software. For instance, the visitor pattern can be implemented in Python as
 
 ~~~
-from abc import ABC, abstractmethod
-
 class Particle:
 
     '''Base class for a Particle. Particles
     can be translated, rotated, reflected, etc'''
 
-    def transform(self, transformer):
-        method_name = 'transform_{}'.format(self.__class__.__name__.lower())
+    def move(self, transformer):
+        method_name = 'move_{}'.format(self.__class__.__name__.lower())
         try:
             visit = getattr(transformer, method_name)
         except AttributeError:
@@ -269,7 +282,7 @@ class Particle:
 
 class Sphere(Particle):
 
-    '''A Sphere is a type of particle, for instance, 
+    '''A Sphere is a type of particle, for instance,
     point particles with Lennard-Jones potential'''
     def __init__(self, center):
         self.center = center
@@ -280,13 +293,13 @@ class Gay_Berne(Particle):
     of the 12-6 Lennard-Jones potential. It is used
     exstensively to model liquid crystals'''
     def __init__(self, center, vector):
-        self.center = center 
-        self.vector = vector 
+        self.center = center
+        self.vector = vector
 
 class Cluster(Particle):
 
     '''A cluster is a collection of particles. It can
-    be composed of spherical, anisotropic, patchy or 
+    be composed of spherical, anisotropic, patchy or
     any other particle'''
 
     def __init__(self):
@@ -296,29 +309,28 @@ class Cluster(Particle):
         self.particles.append(particle)
 
 class Translator:
-    def transform_sphere(self, sphere):
+    def move_sphere(self, sphere):
         print('Translating sphere should be very straightforward')
         sphere.center[0] += 1.0
 
-    def transform_gay_berne(self, gay_berne):
+    def move_gay_berne(self, gay_berne):
         print('Translating solid should involve COM computation and subsequent translation')
 
-    def transform_cluster(self, cluster):
+    def move_cluster(self, cluster):
         print('Translating cluster should involve COM computation and subsequent translation')
         for particle in cluster.particles:
-            particle.transform(self) 
-
+            particle.move(self)
 
 class Rotator:
 
-    def transform_gay_berne(self, gay_berne):
+    def move_gay_berne(self, gay_berne):
         print('Rotating Gay Berne using Eulerian angles')
         gay_berne.vector[0] = 1
 
-    def transform_cluster(self, cluster):
+    def move_cluster(self, cluster):
         print('Rotating cluster using Eulerian angles')
         for particle in cluster.particles:
-            particle.transform(self)
+            particle.move(self)
 
 def main():
 
@@ -331,23 +343,23 @@ def main():
     argon = Sphere(origin)
     krypton = Sphere(origin)
     liquid_crystal = Gay_Berne(origin, vector)
-   
+
     cluster = Cluster()
     cluster.add_particle(argon)
     cluster.add_particle(krypton)
     cluster.add_particle(liquid_crystal)
 
-    argon.transform(translator)
-    argon.transform(rotator)
-    
-    krypton.transform(translator)
-    krypton.transform(rotator)
+    argon.move(translator)
+    argon.move(rotator)
 
-    liquid_crystal.transform(translator)
-    liquid_crystal.transform(rotator)
+    krypton.move(translator)
+    krypton.move(rotator)
 
-    cluster.transform(translator)
-    cluster.transform(rotator)
+    liquid_crystal.move(translator)
+    liquid_crystal.move(rotator)
+
+    cluster.move(translator)
+    cluster.move(rotator)
 
 if __name__ == "__main__":
     main()
