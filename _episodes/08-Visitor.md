@@ -20,7 +20,6 @@ As you start modifying your code, you'll realize that you need to modify your Co
 base class and each of the Patchy, Cluster and other children classes:
 
 ~~~
-import numpy as np
 from abc import ABC, abstractmethod
 
 class Component(ABC):
