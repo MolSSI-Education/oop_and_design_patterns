@@ -243,3 +243,115 @@ if __name__ == "__main__":
     main()
 ~~~
 {: .language-python}
+
+## Implementation in Python
+
+As a dynamic language, Python offers functionality that ends up simplifying
+and sometimes nullyfing the need for design patterns as described in the
+classic book Design Patterns: Elements of Object-Oriented Software. For instance, the visitor pattern can be implemented in Python as
+
+~~~
+from abc import ABC, abstractmethod
+
+class Particle:
+
+    '''Base class for a Particle. Particles
+    can be translated, rotated, reflected, etc'''
+
+    def transform(self, transformer):
+        method_name = 'transform_{}'.format(self.__class__.__name__.lower())
+        try:
+            visit = getattr(transformer, method_name)
+        except AttributeError:
+
+            print("WARNING: The transformer {} does not contain the method {} for type {}".format(transformer.__class__.__name__, method_name, self.__class__.__name__))
+            return
+        return visit(self)
+
+class Sphere(Particle):
+
+    '''A Sphere is a type of particle, for instance, 
+    point particles with Lennard-Jones potential'''
+    def __init__(self, center):
+        self.center = center
+
+class Gay_Berne(Particle):
+
+    '''A Gay Berne particle is an anisotropic model
+    of the 12-6 Lennard-Jones potential. It is used
+    exstensively to model liquid crystals'''
+    def __init__(self, center, vector):
+        self.center = center 
+        self.vector = vector 
+
+class Cluster(Particle):
+
+    '''A cluster is a collection of particles. It can
+    be composed of spherical, anisotropic, patchy or 
+    any other particle'''
+
+    def __init__(self):
+        self.particles = []
+
+    def add_particle(self, particle):
+        self.particles.append(particle)
+
+class Translator:
+    def transform_sphere(self, sphere):
+        print('Translating sphere should be very straightforward')
+        sphere.center[0] += 1.0
+
+    def transform_gay_berne(self, gay_berne):
+        print('Translating solid should involve COM computation and subsequent translation')
+
+    def transform_cluster(self, cluster):
+        print('Translating cluster should involve COM computation and subsequent translation')
+        for particle in cluster.particles:
+            particle.transform(self) 
+
+
+class Rotator:
+
+    def transform_gay_berne(self, gay_berne):
+        print('Rotating Gay Berne using Eulerian angles')
+        gay_berne.vector[0] = 1
+
+    def transform_cluster(self, cluster):
+        print('Rotating cluster using Eulerian angles')
+        for particle in cluster.particles:
+            particle.transform(self)
+
+def main():
+
+    translator = Translator()
+    rotator = Rotator()
+
+    origin = [0.0, 0.0]
+    vector = [1.0, 0.0]
+
+    argon = Sphere(origin)
+    krypton = Sphere(origin)
+    liquid_crystal = Gay_Berne(origin, vector)
+   
+    cluster = Cluster()
+    cluster.add_particle(argon)
+    cluster.add_particle(krypton)
+    cluster.add_particle(liquid_crystal)
+
+    argon.transform(translator)
+    argon.transform(rotator)
+    
+    krypton.transform(translator)
+    krypton.transform(rotator)
+
+    liquid_crystal.transform(translator)
+    liquid_crystal.transform(rotator)
+
+    cluster.transform(translator)
+    cluster.transform(rotator)
+
+if __name__ == "__main__":
+    main()
+
+~~~
+{: .language-python}
