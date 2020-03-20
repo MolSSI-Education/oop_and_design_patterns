@@ -46,13 +46,14 @@ molecule_name = "water molecule"
 molecule_charge = 0.0
 molecule_symbols = ["O", "H", "H"]
 
-print('name: ', molecule_name, '\ncharge:', molecule_charge, '\nsymbols:', molecule_symbols)
+print(f'name: {molecule_name}\ncharge: {molecule_charge}\nsymbols: {molecule_symbols}')
 
 molecule2_name = "He"
 molecule2_charge = 0.0
 molecule2_symbols = ["He"]
 
-print('name: ', molecule2_name, '\ncharge:', molecule2_charge, '\nsymbols:', molecule2_symbols)
+print(f'name: {molecule2_name}\ncharge: {molecule2_charge}\nsymbols: {molecule2_symbols}')
+
 ~~~
 {: .language-python}
 For each new molecule we want to build using this method, we need to create a new variable name for each of the variables and redefine how we are printing them.
@@ -120,7 +121,7 @@ print(mol1.symbols)
 You should see the output
 
 ~~~
-water dimer
+water molecule
 0.0
 ['O', 'H', 'H']
 ~~~
@@ -169,7 +170,7 @@ class Molecule:
         self.symbols = symbols
 		
     def __str__(self):
-        return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
 		
 mol1 = Molecule('water molecule', 0.0, ["O", "H", "H"])
 mol2 = Molecule('He', 0.0, ["He"])
@@ -188,11 +189,11 @@ You should see output that looks like this
 
 ~~~
 name: water molecule
-charge:0.0
-symbols:['O', 'H', 'H']
+charge: 0.0
+symbols: ['O', 'H', 'H']
 name: He
-charge:0.0
-symbols:['He']
+charge: 0.0
+symbols: ['He']
 ~~~
 {: .language-output}
 
@@ -211,11 +212,11 @@ Now anytime we wish to create a new molecule object and print out its values, we
 >>      self.num_atoms = len(symbols)
 >>
 >>  def __str__(self):
->>      return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
->>
+>>      return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
+>> 
 >> mol1 = Molecule('water molecule', 0.0, ["O", "H", "H"])
 >>
->> print(F'{mol1.name} has {mol1.num_atoms} atoms.')
+>> print(f'{mol1.name} has {mol1.num_atoms} atoms.')
 >> ~~~
 >> {: .language-python}
 >>
@@ -264,7 +265,7 @@ Consider our Molecule class:
       self.num_atoms = len(symbols)
 
   def __str__(self):
-      return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+      return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
 ~~~
 {: .language-python}
 
@@ -287,7 +288,7 @@ class Molecule:
         self.num_atoms = len(symbols)
 
     def __str__(self):
-        return 'name: ' + str(self.name) + '\ncharge:' + str(self.charge) + '\nsymbols:' + str(self.symbols)
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
 ~~~
 {: .language-python}
 
@@ -341,7 +342,7 @@ class Student:
         self.courses.append(new_course)
         
     def __str__(self):
-        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
 ~~~
 {: .language-python}
 
@@ -362,7 +363,7 @@ class Student:
 >>      self.courses.remove(course)
 >>
 >>  def __str__(self):
->>      return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+>>      return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
 >> ~~~
 >> {: .language-python}
 > {: .solution}
@@ -380,7 +381,7 @@ class Faculty:
         self.courses = []
         
     def __str__(self):
-        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
 ~~~
 {: .language-python}
 Like a student, a faculty has a set of courses, so we need to have methods to assign and unassign courses from their teaching load.
@@ -400,7 +401,7 @@ class Faculty:
         self.courses.remove(course)
         
     def __str__(self):
-        return self.surname + ", " + self.name + "\nCourses:\n" + str(courses)
+        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
 ~~~
 {: .language-python}
 Having built both a Student class and a Faculty class, notice the similarities between the two.
@@ -423,11 +424,11 @@ class Person:
         for s in self.name:
             id_hash += ord(s)
         for s in self.surname:
-            id_hash = id_hash * ord(s)
+            id_hash *= ord(s)
         return id_hash % 1000000000
     
     def __str__(self):
-        return self.surname + ", " + self.name + "\tID: " + str(self.id)
+        return f'{self.surname}, {self.name}\tID: {self.id}'
 ~~~
 {: .language-python}
 
