@@ -440,7 +440,7 @@ class Student(Person):
         super().__init__(name, surname)
     
     def __str__(self):
-        return super().__str__() + "\nCourses:\n" + str(courses)
+        return super().__str__() + f'\nCourses:\n{self.courses}'
         
     def enroll(self, new_course):
         self.courses.append(new_course)
@@ -457,20 +457,20 @@ In both the `__init__` and `__str__` methods, we are using `super()`, which refe
 >> ## Solution
 >> ~~~
 >> class Faculty(Person):
->>  def __init__(self, name, surname, position, salary):
->>      self.position = position
->>      self.salary = salary
->>      self.courses = []
->>      super().__init__(name, surname)
+>>     def __init__(self, name, surname, position, salary):
+>>         self.position = position
+>>         self.salary = salary
+>>         self.courses = []
+>>         super().__init__(name, surname)
 >>  
->>  def __str__(self):
->>      return super().__str__() + "\nCourses:\n" + self.courses
+>>     def __str__(self):
+>>         return super().__str__() + f'\nCourses:\n{self.courses}'
 >>  
->>  def assign_course(self, new_course):
->>      self.courses.append(new_course)
+>>     def assign_course(self, new_course):
+>>         self.courses.append(new_course)
 >>  
->>  def unassign_course(self, course):
->>      self.courses.remove(course)
+>>     def unassign_course(self, course):
+>>         self.courses.remove(course)
 >> ~~~
 >> {: .language-python}
 > {: .solution}
