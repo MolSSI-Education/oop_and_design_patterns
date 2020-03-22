@@ -528,13 +528,13 @@ Here we define the name of our interface.
 Note `ABC`{: .language-python} in the class definition to denote the inheritance.
 Then we create a definition for each method we would like any of the interfaces children to implement.
 ~~~
-	@abstractmethod
-	def first_method(self):
-		pass
-		
-	@abstractmethod
-	def second_method(self):
-		pass
+    @abstractmethod
+    def first_method(self):
+        pass
+
+    @abstractmethod
+    def second_method(self):
+        pass
 ~~~
 {: .language-python}
 Since we have used the `@abstractmethod`{: .language-python} decorator for each of these methods, any child class must implement a method with the same name as the interface.
@@ -542,12 +542,12 @@ Since we have used the `@abstractmethod`{: .language-python} decorator for each 
 To convert this class from an Interface to an Abstract Class, we simply include one or more methods that are already implemented.
 ~~~
 class abstract_class_sample(ABC):
-	@abstractmethod
-	def first_method(self):
-		pass
-		
-	def second_method(self):
-		print('Doing something in this method so it is implemented.')
+    @abstractmethod
+    def first_method(self):
+        pass
+
+    def second_method(self):
+        print('Doing something in this method so it is implemented.')
 ~~~
 {: .language-python}
 
