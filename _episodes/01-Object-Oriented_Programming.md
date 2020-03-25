@@ -205,14 +205,14 @@ Now anytime we wish to create a new molecule object and print out its values, we
 >> ## Solution
 >> ~~~
 >> class Molecule:
->>  def __init__(self, name, charge, symbols):
->>      self.name = name
->>      self.charge = charge
->>      self.symbols = symbols
->>      self.num_atoms = len(symbols)
+>>     def __init__(self, name, charge, symbols):
+>>         self.name = name
+>>         self.charge = charge
+>>         self.symbols = symbols
+>>         self.num_atoms = len(symbols)
 >>
->>  def __str__(self):
->>      return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
+>>     def __str__(self):
+>>         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
 >> 
 >> mol1 = Molecule('water molecule', 0.0, ["O", "H", "H"])
 >>
@@ -257,15 +257,15 @@ However, the predominantly accepted practice is to treate names prefixed with an
 The best way to achieve data abstraction in python is to use the '@property' decorator, and the 'setter' decorator. These allow attributes to be used in a pythonic way, while allowing more control over their values.
 Consider our Molecule class:
 ~~~
- class Molecule:
-  def __init__(self, name, charge, symbols):
-      self.name = name
-      self.charge = charge
-      self.symbols = symbols
-      self.num_atoms = len(symbols)
+class Molecule:
+    def __init__(self, name, charge, symbols):
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
+        self.num_atoms = len(symbols)
 
-  def __str__(self):
-      return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
+    def __str__(self):
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}'
 ~~~
 {: .language-python}
 
@@ -351,19 +351,19 @@ class Student:
 >> ## Solution
 >> ~~~
 >> class Student:
->>   def __init__(self, name, surname):
->>      self.name = name
->>      self.surname = surname
->>      self.courses = []
+>>     def __init__(self, name, surname):
+>>         self.name = name
+>>         self.surname = surname
+>>         self.courses = []
 >>
->>  def enroll(self, new_course):
->>      self.courses.append(new_course)
+>>     def enroll(self, new_course):
+>>         self.courses.append(new_course)
 >>
->>  def drop_course(self, course):
->>      self.courses.remove(course)
+>>     def drop_course(self, course):
+>>         self.courses.remove(course)
 >>
->>  def __str__(self):
->>      return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
+>>     def __str__(self):
+>>         return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
 >> ~~~
 >> {: .language-python}
 > {: .solution}
