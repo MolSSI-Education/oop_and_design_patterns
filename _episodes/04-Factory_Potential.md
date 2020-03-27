@@ -201,7 +201,7 @@ Instead of using a set of if statements, we could use a Python dictionary to imp
 
 ~~~
 def potential_factory(potential_type, **kwargs):
-   cls_dict = {'LJ': 'LJ', 'Buckingham': 'Buckingham'}    # or `cls_dict = dict(LJ='LJ', Buckingham='Buckingham')`
+   cls_dict = dict(LJ=LJ, Buckingham=Buckingham)
 
    if potential_type not in cls_dict.keys():
        raise Exception('Potential type not found')
