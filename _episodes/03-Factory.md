@@ -113,8 +113,6 @@ from .trajectoryadapter import TrajectoryAdapter
 _toolkits = {}
 
 def trajectory_factory(trajectory_toolkit, **kwargs):
-    traj_toolkits = {'MDTraj': MDTrajAdapter, 'MDAnalysis': MDAnalysisAdapter}
-    
     if trajectory_toolkit not in _toolkits.keys():
        raise TypeError('Toolkit not found')
     
