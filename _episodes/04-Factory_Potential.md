@@ -33,7 +33,6 @@ You implement such functional forms using the following classes:
 ~~~
 class LJ:
    def __init__(self, epsilon, sigma):
-
        self.sigma = sigma
        self.epsilon = epsilon
 
@@ -43,7 +42,6 @@ class LJ:
 
 class Buckingham:
    def __init__(self, rho, A, C):
-
        self.rho = rho
        self.A = A
        self.C = C
@@ -73,12 +71,11 @@ The factory method for our simulation potentials could look like:
 
 ~~~
 def potential_factory(potential_type, **kwargs):
-
     if potential_type == 'LJ':
-        return LJ(kwargs)
+        return LJ(**kwargs)
 
     elif potential_type == 'Buckingham':
-        return Buckingham(kwargs)
+        return Buckingham(**kwargs)
 
     else:
         raise Exception('Potential type not found')
@@ -106,6 +103,7 @@ classes
 ~~~
 from abc import ABC, abstractmethod
 
+
 class Potential(ABC):
    @abstractmethod
    def get_energy(self):
@@ -127,7 +125,7 @@ constructors to make sure we input the right number of parameters and we use
 the desired keywords:
 
 ~~~
-for key, value in kwargs.items():
+for key in kwargs:
     if key not in ['epsilon', 'sigma']:
         raise KeyError('LJ potential: Must input epsilon and sigma')
 ~~~
@@ -145,15 +143,16 @@ The final version of our code is
 from abc import ABC, abstractmethod
 import numpy as np
 
+
 class Potential(ABC):
    @abstractmethod
    def get_energy(self):
        pass
 
-class LJ(Potential):
-   def __init__(self, kwargs):
 
-       for key, value in kwargs.items():
+class LJ(Potential):
+   def __init__(self, **kwargs):
+       for key in kwargs:
            if key not in ['epsilon', 'sigma']:
                raise KeyError('LJ potential: Must input epsilon and sigma')
 
@@ -165,9 +164,8 @@ class LJ(Potential):
 
 
 class Buckingham(Potential):
-   def __init__(self, kwargs):
-
-       for key, value in kwargs.items():
+   def __init__(self, **kwargs):
+       for key in kwargs:
            if key not in ['A', 'C', 'rho']:
                raise KeyError('Buckingham potential: Must input A, C and rho')
 
@@ -180,12 +178,11 @@ class Buckingham(Potential):
 
 
 def potential_factory(potential_type, **kwargs):
-
     if potential_type == 'LJ':
-        return LJ(kwargs)
+        return LJ(**kwargs)
 
     elif potential_type == 'Buckingham':
-        return Buckingham(kwargs)
+        return Buckingham(**kwargs)
 
     else:
         raise Exception('Potential type not found')
@@ -204,14 +201,14 @@ Instead of using a set of if statements, we could use a Python dictionary to imp
 
 ~~~
 def potential_factory(potential_type, **kwargs):
-   cls_dict = dict(LJ=LJ, Buckingham=Buckingham)
+   cls_dict = {'LJ': 'LJ', 'Buckingham': 'Buckingham'}    # or `cls_dict = dict(LJ='LJ', Buckingham='Buckingham')`
 
    if potential_type not in cls_dict.keys():
        raise Exception('Potential type not found')
 
    cls = cls_dict[potential_type]
 
-   cls_instance = cls(kwargs)
+   cls_instance = cls(**kwargs)
    return cls_instance
 ~~~
 {: .language-python}
@@ -220,12 +217,12 @@ The first line of our function creates a dictionary whose values are classes of
 potentials. Note that these have not been instantiated yet. After an if
 statements that handles errors, we choose the correct class from the dictionary
 using the input arguments to our function. The cls variable contains the class
-of potential that we need. The line cls(kwargs) instantiates the class with the
+of potential that we need. The line cls(**kwargs) instantiates the class with the
 provided arguments (i.e. sigma or epsilon for LJ or A, C and rho for
 Buckingham).
 
 One advantage of using dictionaries over if statements is that they can be
-coupled with a registry
+[coupled with a registry]
 (http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
 and make the construction of the dictionary automatic and improve the
 extensibility of the potential library. 
