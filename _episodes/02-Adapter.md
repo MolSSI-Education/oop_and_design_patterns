@@ -42,14 +42,13 @@ We will use Python's [abc] module to help build the interface, so we will need t
 from abc import abstractmethod, ABC
 
 class TrajectoryAdapter(ABC):
-	
-	@abstractmethod
-	def compute_center_of_mass():
-		pass
+    @abstractmethod
+    def compute_center_of_mass():
+        pass
 		
-	@abstractmethod
-	def compute_radius_of_gyration():
-		pass
+    @abstractmethod
+    def compute_radius_of_gyration():
+        pass
 ~~~
 {: .language-python}
 Inheriting from ABC and decorating the methods with `@abstractmethod` ensures that any subclass of TrajectoryAdapter must override both methods.
@@ -63,9 +62,9 @@ Any code developed using the listed abstract methods from the interface will now
 We will start by building an Adapter that utilizes MDTraj.
 ~~~
 class MDTrajAdapter(TrajectoryAdapter):
-	def __init__(self, filename):
-		self.trajectory = md.load_pdb(filename)
-		print('Selected MDTraj.')
+    def __init__(self, filename):
+        self.trajectory = md.load_pdb(filename)
+        print('Selected MDTraj.')
 ~~~
 {: .language-python}
 Here we define the class with a constructor that takes in the name of our PDB file.
@@ -75,15 +74,15 @@ To help determine that we are using the correct adapter, we include a simple pri
 Since both methods in `TrajectoryAdapter` are abstract methods, we must override them.
 First we will implement the `compute_center_of_mass` function.
 ~~~
-	def compute_center_of_mass(self):
-		return 10*md.compute_center_of_mass(self.trajectory)
+    def compute_center_of_mass(self):
+        return 10 * md.compute_center_of_mass(self.trajectory)
 ~~~
 {: .language-python}
 We utilize the `compute_center_of_mass` from MDTraj with our trajectory.
 The code interested in performing these calculations wants to use &#197;ngstr&#246;ms, but MDTraj uses nanometers, so we need to do a quick conversion of our results.
 ~~~
-	def compute_radius_of_gyration(self):
-		return 10*md.compute_rg(self.trajectory)
+    def compute_radius_of_gyration(self):
+        return 10 * md.compute_rg(self.trajectory)
 ~~~
 {: .language-python}
 We similarly implement the `compute_radius_of_gyration` method and perform the unit conversion.
@@ -92,8 +91,8 @@ We can now use our MDTrajAdapter to calculate the center of mass and radius of g
 Using the PDB file provided in the setup section, we can test our code.
 ~~~
 mda = MDTrajAdapter('protein.pdb')
-print('Center of mass:\n', mda.compute_center_of_mass())
-print('Radius of Gyration:\n', mda.compute_radius_of_gyration())
+print(f'Center of mass:\n{mda.compute_center_of_mass()}')
+print(f'Radius of Gyration:\n{mda.compute_radius_of_gyration()}')
 ~~~
 {: .language-python}
 ~~~
@@ -111,9 +110,9 @@ We would like to change the library we are using to MDAnalysis without adjusting
 First, we will construct another Adapter for MDAnalysis.
 ~~~
 class MDAnalysisAdapter(TrajectoryAdapter):
-	def __init__(self, filename):
-		self.trajectory = MDAnalysis.Universe(filename)
-		print('Selected MDAnalysis.')
+    def __init__(self, filename):
+        self.trajectory = MDAnalysis.Universe(filename)
+        print('Selected MDAnalysis.')
 ~~~
 {: .language-python}
 Here we define the class with a constructor that takes in the name of our PDB file.
@@ -122,11 +121,11 @@ We construct a trajectory object by using the `Universe(filename)` method from t
 Since both methods in `TrajectoryAdapter` are abstract methods, we must override them.
 First we will implement the `compute_center_of_mass` function.
 ~~~
-def compute_center_of_mass(self):
-		mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
-		for ts in self.trajectory.trajectory:
-			mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
-		return mass_by_frame
+    def compute_center_of_mass(self):
+        mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
+        for ts in self.trajectory.trajectory:
+            mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
+        return mass_by_frame
 ~~~
 {: .language-python}
 Since our code is looking for an ndarray from NumPy, we need to ensure that the return type of the functions using MDAnalysis are also in ndarrays.
@@ -135,11 +134,11 @@ We then iterate through the timesteps of our trajectory and calculate the center
 
 We will similarly implement the `compute_radius_of_gyration` function.
 ~~~
-def compute_radius_of_gyration(self):
-		rg_by_frame = np.empty(len(self.trajectory.trajectory))
-		for ts in self.trajectory.trajectory:
-			rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
-		return rg_by_frame
+    def compute_radius_of_gyration(self):
+        rg_by_frame = np.empty(len(self.trajectory.trajectory))
+        for ts in self.trajectory.trajectory:
+            rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
+        return rg_by_frame
 ~~~
 {: .language-python}
 
@@ -148,8 +147,8 @@ To an external class, the two Adapters are now interchangable.
 We will run the same test with the only difference being the adapter we use.
 ~~~
 mda = MDAnalysisAdapter('protein.pdb')
-print('Center of mass:\n', mda.compute_center_of_mass())
-print('Radius of Gyration:\n', mda.compute_radius_of_gyration())
+print(f'Center of mass:\n{mda.compute_center_of_mass()}')
+print(f'Radius of Gyration:\n{mda.compute_radius_of_gyration()}')
 ~~~
 {: .language-python}
 ~~~
