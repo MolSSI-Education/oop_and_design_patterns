@@ -35,33 +35,33 @@ A factory works best when the different constructed classes work from a shared b
 We restate the two adapter classes here for easier viewing:
 ~~~
 class MDAnalysisAdapter(TrajectoryAdapter):
-	def __init__(self, filename):
-		self.trajectory = MDAnalysis.Universe(filename)
-		print('Selected MDAnalysis.')
+    def __init__(self, filename):
+        self.trajectory = MDAnalysis.Universe(filename)
+        print('Selected MDAnalysis.')
 	
-	def compute_center_of_mass(self):
-		mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
-		for ts in self.trajectory.trajectory:
-			mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
-		return mass_by_frame
+    def compute_center_of_mass(self):
+        mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
+        for ts in self.trajectory.trajectory:
+            mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
+        return mass_by_frame
 	
-	def compute_radius_of_gyration(self):
-		rg_by_frame = np.empty(len(self.trajectory.trajectory))
-		for ts in self.trajectory.trajectory:
-			rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
-		return rg_by_frame
+    def compute_radius_of_gyration(self):
+        rg_by_frame = np.empty(len(self.trajectory.trajectory))
+        for ts in self.trajectory.trajectory:
+            rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
+        return rg_by_frame
 		
 		
 class MDTrajAdapter(TrajectoryAdapter):
-	def __init__(self, filename):
-		self.trajectory = md.load_pdb(filename)
-		print('Selected MDTraj.')
+    def __init__(self, filename):
+        self.trajectory = md.load_pdb(filename)
+        print('Selected MDTraj.')
 	
-	def compute_center_of_mass(self):
-		return 10*md.compute_center_of_mass(self.trajectory)
+    def compute_center_of_mass(self):
+        return 10 * md.compute_center_of_mass(self.trajectory)
 	
-	def compute_radius_of_gyration(self):
-		return 10*md.compute_rg(self.trajectory)
+    def compute_radius_of_gyration(self):
+        return 10 * md.compute_rg(self.trajectory)
 ~~~
 {: .language-python}
 
@@ -113,8 +113,6 @@ from .trajectoryadapter import TrajectoryAdapter
 _toolkits = {}
 
 def trajectory_factory(trajectory_toolkit, **kwargs):
-    traj_toolkits = {'MDTraj': MDTrajAdapter, 'MDAnalysis': MDAnalysisAdapter}
-    
     if trajectory_toolkit not in _toolkits.keys():
        raise TypeError('Toolkit not found')
     
