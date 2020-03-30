@@ -31,50 +31,50 @@ We then consider the classes we are using to perform our computations.
 For simplicity, we will use slightly modified versions of the Adapter classes from the Adapter design pattern example.
 ~~~
 class MDAnalysisTrajectoryHandler:
-	def __init__(self, filename):
-		self.trajectory = MDAnalysis.Universe(filename)
+    def __init__(self, filename):
+        self.trajectory = MDAnalysis.Universe(filename)
 	
-	def compute_center_of_mass(self):
-		mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
-		for ts in self.trajectory.trajectory:
-			mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
-		return mass_by_frame
+    def compute_center_of_mass(self):
+        mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
+        for ts in self.trajectory.trajectory:
+            mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
+        return mass_by_frame
 	
-	def compute_radius_of_gyration(self):
-		rg_by_frame = np.empty(len(self.trajectory.trajectory))
-		for ts in self.trajectory.trajectory:
-			rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
-		return rg_by_frame
+    def compute_radius_of_gyration(self):
+        rg_by_frame = np.empty(len(self.trajectory.trajectory))
+        for ts in self.trajectory.trajectory:
+            rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
+        return rg_by_frame
 		
 		
 class MDTrajTrajectoryHandler:
-	def __init__(self, filename):
-		self.trajectory = md.load_pdb(filename)
+    def __init__(self, filename):
+        self.trajectory = md.load_pdb(filename)
 	
-	def compute_center_of_mass(self):
-		return 10*md.compute_center_of_mass(self.trajectory)
+    def compute_center_of_mass(self):
+        return 10 * md.compute_center_of_mass(self.trajectory)
 	
-	def compute_radius_of_gyration(self):
-		return 10*md.compute_rg(self.trajectory)
+    def compute_radius_of_gyration(self):
+        return 10 * md.compute_rg(self.trajectory)
 ~~~
 {: .language-python}
 If we wanted to use various functions to perform our compute workflow, we would need to construct an object of each class and execute the relevant methods.
 Instead, we are going to construct a Facade to handle it for us.
 ~~~
 class TrajectoryAnalyzer:
-	def __init__(self, filename):
-		self.mda = MDAnalysisTrajectoryHandler(filename)
-		self.mdt = MDTrajTrajectoryHandler(filename)
+    def __init__(self, filename):
+        self.mda = MDAnalysisTrajectoryHandler(filename)
+        self.mdt = MDTrajTrajectoryHandler(filename)
 ~~~
 {: .language-python}
 The constructor for our Facade takes a filename, the path to the PDB file, and creates and instance of each Handler file.
 Since we have a consistent workflow that we want to use, we will create a function that executes it based on the given input file.
 ~~~
-	def analysis(self):
-		results = {}
-		results['MDAnalysis_center_of_mass'] = self.mda.compute_center_of_mass()
-		results['MDTraj_radius_of_gyration'] = self.mdt.compute_radius_of_gyration()
-		return results
+    def analysis(self):
+        results = {}
+        results['MDAnalysis_center_of_mass'] = self.mda.compute_center_of_mass()
+        results['MDTraj_radius_of_gyration'] = self.mdt.compute_radius_of_gyration()
+        return results
 ~~~
 {: .language-python}
 The analysis function executes our workflow on the trajectory and returns a dictionary.
