@@ -25,19 +25,108 @@ The structure of an Adapter is shown in the figure below.
 As an example, consider the situation where we would like to read a Molecular Dynamics (MD) trajectory from a PDB file and perform some analysis on it.
 We currently have an MD library in mind to use, but we may want to use one or more different libraries in the future.
 If we do not want to re-write our code for each individual library, we need to come up with a different solution, in this case it will be to create an adapter.
-We will use two MD libraries, [MDAnalysis] and [MDTraj] in this example.
+We will use two MD libraries, [MDAnalysis] and [MDTraj] in this example. Our goal is to create a code that uses MDTraj or MDAnalysis to perform some simple analysis on a trajectory file. To keep the runtime short, we will only use the center of mass and the radius of gyration from each code, but the concepts shown will apply to more in depth computations.
+A sample trajectory file to use was provided in PDB form in the Setup instructions.
 We will also be using [NumPy] to structure some of our data.
 
-First, we will import the libraries we want to use.
+## Trajectory Analysis Script
+
+To start, let us consider how we would these libraries without an adapter. We would first pick a library to start with, in this case MDTraj.
+We begin by importing the libraries we want to use.
 ~~~
-import numpy as np
-import MDAnalysis
-import mdtraj as md
+import mdtraj as mdt
 ~~~
 {: .language-python}
 
+To load a PDB file in MDTraj, we use the `load_pdb` function. We can then use the functions from MDTraj to perform our two computations.
+
+~~~
+trajectory = mdt.load_pdb('protein.pdb')
+
+print(f'Center of mass: \n{mdt.compute_center_of_mass(trajectory)}')
+print(f'Radius of Gyration: \n{mdt.compute_rg(trajectory)}')
+~~~
+{: .language-python}
+
+Running this script should provide the following output:
+~~~
+Center of mass:
+[[2.67682053 2.3596378  2.50332589]
+ [2.65342927 2.40336034 2.5024845 ]
+ [2.73598621 2.44005027 2.49118094]]
+Radius of Gyration:
+[1.20598191 1.21791131 1.21806974]
+~~~
+{: .output}
+
+Now let us consider that we want to change the library we are using for analysis. Let us quickly change the code to use MDAnalysis to load the PDB and perform our two computations.
+~~~
+#import mdtraj as mdt
+import MDAnalysis as mda
+
+#trajectory = mdt.load_pdb('protein.pdb')
+trajectory = mda.Universe('protein.pdb')
+
+#print(mdt.compute_center_of_mass(trajectory))
+#print(mdt.compute_rg(trajectory))
+print(f'Center of mass: \n{trajectory.atoms.center_of_mass(compound="segments")}')
+print(f'Radius of Gyration: \n{trajectory.atoms.radius_of_gyration()}')
+~~~
+{: .language-python}
+
+The first thing to notice is that the two libraries handle the operations very differently. The function definitions are completely distinct from one another. Any code that is utilizing the center of mass and radius of gyration from MDTraj may have to make significant changes to update the analysis library.
+Lets take a look at the output of the above code.
+~~~
+Center of mass:
+[[26.7681786  23.59642783 25.03328876]]
+Radius of Gyration:
+11.90080870784717
+~~~
+{: .language-python}
+
+We can see that not only are the function definitions different, both the output structure and the units are different. MDTraj is outputting in nanometers and MDAnalysis is using &#197;ngstr&#246;ms. Lets use &#197;ngstr&#246;ms moving forward, but we want the same output structure from MDTraj. We will need a little help from [NumPy], so be sure to import it.
+
+~~~
+#import mdtraj as mdt
+import MDAnalysis as mda
+import numpy as np
+
+#trajectory = mdt.load_pdb('protein.pdb')
+trajectory = mda.Universe('protein.pdb')
+
+#print(mdt.compute_center_of_mass(trajectory))
+#print(mdt.compute_rg(trajectory))
+
+mass_by_frame = np.ndarray(shape=(len(trajectory.trajectory), 3))
+for ts in trajectory.trajectory:
+    mass_by_frame[ts.frame] = trajectory.atoms.center_of_mass(compound='segments')
+print(f'Center of mass: \n{mass_by_frame}')
+
+rg_by_frame = np.empty(len(trajectory.trajectory))
+for ts in trajectory.trajectory:
+    rg_by_frame[ts.frame] = trajectory.atoms.radius_of_gyration()
+print(f'Radius of Gyration: \n{rg_by_frame}')
+~~~
+{: .language-python}
+
+This will provide us with the output in the desired form.
+
+~~~
+Center of mass:
+[[26.7681786  23.59642783 25.03328876]
+ [26.53426535 24.03365348 25.02487714]
+ [27.35982618 24.40054767 24.91184063]]
+Radius of Gyration:
+[11.90080871 12.02935585 12.03777011]
+~~~
+{: .output}
+
+This was a very simple script, but replacing the libraries has cost us a fair bit of effort. If we had put some thought into it from the beginning, we could have created an abstraction layer to protect our code from changes like these. This is where the adapter design pattern will come in.
+
+## Trajectory Adapter 
+
 Based on SOLID design principles, we want to code towards an interface, not a specific class, so we want to create an interface to base our adapters on.
-We will use Python's [abc] module to help build the interface, so we will need to import it and build our interface.
+We will use Python's [abc] module to help build the interface, so we will need to import it and build our interface. We create a new file called `trajectoryAdapter.py` to hold our adapter.
 ~~~
 from abc import abstractmethod, ABC
 
@@ -45,7 +134,7 @@ class TrajectoryAdapter(ABC):
     @abstractmethod
     def compute_center_of_mass():
         pass
-		
+
     @abstractmethod
     def compute_radius_of_gyration():
         pass
@@ -53,20 +142,27 @@ class TrajectoryAdapter(ABC):
 {: .language-python}
 Inheriting from ABC and decorating the methods with `@abstractmethod` ensures that any subclass of TrajectoryAdapter must override both methods.
 Any code developed using the listed abstract methods from the interface will now work with any adapter we construct that inherits from `TrajectoryAdapter`.
+
 > ## Inheritance
 > Inheritance is the principle of extending a class to add capabilities without modifying the original class.
 > We call the class that is being inherited the parent, and the class that is inheriting the child.
 > The child class obtains the properties and behaviors of its parent unless it overrides them.
 {: .callout}
 
-We will start by building an Adapter that utilizes MDTraj.
+## MDTraj Adapter
+
+We will start by building an Adapter that utilizes MDTraj. We create a new file called `mdtra_adapter.py`. Remember to import the adapter and mdtraj.
 ~~~
+from trajectoryAdapter import TrajectoryAdapter
+import mdtraj as mdt
+
 class MDTrajAdapter(TrajectoryAdapter):
     def __init__(self, filename):
         self.trajectory = md.load_pdb(filename)
         print('Selected MDTraj.')
 ~~~
 {: .language-python}
+
 Here we define the class with a constructor that takes in the name of our PDB file.
 We construct a trajectory object by using the `load_pdb(filename)` method from the MDTraj library.
 To help determine that we are using the correct adapter, we include a simple print statement informing the User that the MDTraj library is selected.
@@ -79,7 +175,7 @@ First we will implement the `compute_center_of_mass` function.
 ~~~
 {: .language-python}
 We utilize the `compute_center_of_mass` from MDTraj with our trajectory.
-The code interested in performing these calculations wants to use &#197;ngstr&#246;ms, but MDTraj uses nanometers, so we need to do a quick conversion of our results.
+Our code is interested in performing these calculations using &#197;ngstr&#246;ms, but MDTraj uses nanometers, so we need to do a quick conversion of our results.
 ~~~
     def compute_radius_of_gyration(self):
         return 10 * md.compute_rg(self.trajectory)
@@ -88,8 +184,10 @@ The code interested in performing these calculations wants to use &#197;ngstr&#2
 We similarly implement the `compute_radius_of_gyration` method and perform the unit conversion.
 
 We can now use our MDTrajAdapter to calculate the center of mass and radius of gyration of a given trajectory.
-Using the PDB file provided in the setup section, we can test our code.
+Using the sample trajectory, we edit our script to use the adapter.
 ~~~
+from mdtraj_adapter import MDTrajAdapter
+
 mda = MDTrajAdapter('protein.pdb')
 print(f'Center of mass:\n{mda.compute_center_of_mass()}')
 print(f'Radius of Gyration:\n{mda.compute_radius_of_gyration()}')
@@ -106,9 +204,15 @@ Radius of Gyration:
 ~~~
 {: .output}
 
-We would like to change the library we are using to MDAnalysis without adjusting the function calls.
-First, we will construct another Adapter for MDAnalysis.
+## MDAnalysis Adapter
+
+Now we would like to change our code to use the MDAnalysis library, ideally with minimal impact on our script, which is simulating a larger code.
+Let us construct another Adapter for MDAnalysis. Create a new file called `mdanalysis_adapter.py` and include the imports.
 ~~~
+from trajectoryAdapter import TrajectoryAdapter
+import MDAnalysis as mda
+import numpy as np
+
 class MDAnalysisAdapter(TrajectoryAdapter):
     def __init__(self, filename):
         self.trajectory = MDAnalysis.Universe(filename)
@@ -144,21 +248,25 @@ We will similarly implement the `compute_radius_of_gyration` function.
 
 It is important to notice that the constructor and the method calls have the same definition as those in the MDTraj and perform the same operations, with the same return types, but do so in a different way.
 To an external class, the two Adapters are now interchangable.
-We will run the same test with the only difference being the adapter we use.
+We will update our script to use the MDAnalysisAdapter instead.
 ~~~
+#from mdtraj_adapter import MDTrajAdapter
+from mdanalysys_adapter import MDAnalysisAdapter
+
+#mda = MDTrajAdapter('protein.pdb')
 mda = MDAnalysisAdapter('protein.pdb')
 print(f'Center of mass:\n{mda.compute_center_of_mass()}')
 print(f'Radius of Gyration:\n{mda.compute_radius_of_gyration()}')
 ~~~
 {: .language-python}
 ~~~
-Selected MDAnalysis.
+Selected MDAnalysis
 Center of mass:
- [[26.7681786  23.59642783 25.03328876]
+[[26.7681786  23.59642783 25.03328876]
  [26.53426535 24.03365348 25.02487714]
  [27.35982618 24.40054767 24.91184063]]
 Radius of Gyration:
- [11.90080871 12.02935585 12.03777011]
+[11.90080871 12.02935585 12.03777011]
 ~~~
 {: .output}
 
