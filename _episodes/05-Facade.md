@@ -33,27 +33,27 @@ For simplicity, we will use slightly modified versions of the Adapter classes fr
 class MDAnalysisTrajectoryHandler:
     def __init__(self, filename):
         self.trajectory = MDAnalysis.Universe(filename)
-	
+
     def compute_center_of_mass(self):
         mass_by_frame = np.ndarray(shape=(len(self.trajectory.trajectory), 3))
         for ts in self.trajectory.trajectory:
             mass_by_frame[ts.frame] = self.trajectory.atoms.center_of_mass(compound='segments')
         return mass_by_frame
-	
+
     def compute_radius_of_gyration(self):
         rg_by_frame = np.empty(len(self.trajectory.trajectory))
         for ts in self.trajectory.trajectory:
             rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
         return rg_by_frame
-		
-		
+
+
 class MDTrajTrajectoryHandler:
     def __init__(self, filename):
         self.trajectory = md.load_pdb(filename)
-	
+
     def compute_center_of_mass(self):
         return 10 * md.compute_center_of_mass(self.trajectory)
-	
+
     def compute_radius_of_gyration(self):
         return 10 * md.compute_rg(self.trajectory)
 ~~~
@@ -67,7 +67,7 @@ class TrajectoryAnalyzer:
         self.mdt = MDTrajTrajectoryHandler(filename)
 ~~~
 {: .language-python}
-The constructor for our Facade takes a filename, the path to the PDB file, and creates and instance of each Handler file.
+The constructor for our Facade takes a filename, the path to the PDB file, and creates and instance of each Handler.
 Since we have a consistent workflow that we want to use, we will create a function that executes it based on the given input file.
 ~~~
     def analysis(self):
