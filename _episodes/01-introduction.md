@@ -3,13 +3,12 @@ title: "Introduction"
 teaching: 0
 exercises: 0
 questions:
-- "Key question (FIXME)"
+- "What are Design Patterns?"
 objectives:
-- "First learning objective. (FIXME)"
+- "A brief introduction to the types of Design Patterns."
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Design patterns are solutions to common problems in software design."
 ---
-FIXME
 
 {% include links.md %}
 
@@ -17,7 +16,7 @@ Design patterns are solutions to commonly found problems in software design. The
 
 There are various types of patterns:
 
-1) Creational: they deal with object or class creation. They help make a system independent of how its objects are created, composed and represented[1].
+1) Creational: they deal with object or class creation. They help make a system independent of how its objects are created, composed and represented.
 
 2) Structural: they are about class or object composition. They define ways 
 to compose objects to form larger structures and obtain new functionality.
