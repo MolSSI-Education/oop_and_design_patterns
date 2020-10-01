@@ -1,5 +1,5 @@
 ---
-title: 'Factory Design Pattern'
+title: 'Factory Design Pattern Second Example'
 teaching: 30
 exercises: 0
 questions:
