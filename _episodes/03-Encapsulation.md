@@ -14,7 +14,7 @@ keypoints:
 
 {% include links.md %}
 ## Encapsulation
-Encapsulation is the concept of enclosing related data and methods acting on those data within a single unit called a class.
+Encapsulation is the concept of enclosing related data and methods acting on those data within a single object called a class.
 A class will consist of a set of data (variables) and a set of methods that interact with the data.
 There are a number of benefits to creating classes.
 1. It aids in the understanding of the code being developed.
@@ -23,7 +23,7 @@ It means all of the information about that object is grouped into a single locat
 2. As an extension of the first benefit, anyone developing code that utilizes your objects will have a clear understanding of how they are allowed to interact with it.
 The methods they can use will be located within the class of the object.
 3. It promotes security of data by restricting the ways to access data to the specific methods within the class.
-4. Methods have full access to their data so that you don’t have to keep passing data and parameters between methods. Also, this way, you avoid the use of global variables.
+4. Methods have full access to their data so that you don’t have to keep passing data and parameters between methods. Also, this way, you avoid the use of global variables, which while useful, can lead to some issues such as name collision.
 
 
 Classes are used in code to provide a general definition of an object.
@@ -84,6 +84,9 @@ We have the definition of the constructor
 ~~~
 {: .language-python}
 that has three parameters: name, charge, and symbols.
+The 4th parameter, `self` refers to the instance of the class.
+Every method of a class must have a reference to the instance as the first variable.
+This variable can be given any name, but by convention is usually called `self`.
 The parameters of a constructor are required anytime you want to create an instance of the class. 
 These can have default values if they are non-required.
 The next three lines
@@ -93,8 +96,8 @@ The next three lines
         self.symbols = symbols
 ~~~
 {: .language-python}
-set the value of the local object variables to the value of the parameters. Here, the `self` syntax refers to the instance of the class. Any time you want to set or create a variable associated with a class in its definition, you use this syntax. 
-
+set the value of the local object variables to the value of the parameters.
+Any time you want to set or create a variable associated with a class in its definition, you use this syntax. 
 We can now use this class definition in our code. For example, to create our water molecule, we use the class. This is called creating an *instance* of the class.
 
 ~~~
@@ -102,7 +105,7 @@ mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"])
 ~~~
 {: .language-python}
 
-`mol1` in our code is now an object. We can access the variables associated with this instance of the molecule class using a dot notation. Variables associated with a class are also called `attributes`.
+`mol1` in our code is now an object. Note that we do not pass a value to be assigned to `self` as python will automatically fill in the value for that variable when it calls `__init__()`. We can access the variables associated with this instance of the molecule class using a dot notation. Variables associated with a class are also called `attributes`.
 
 ~~~
 print(mol1.name)
@@ -151,9 +154,10 @@ print(mol1)
 ~~~
 {: .output}
 
+Python is printing the location of the object named `mol1`.
 We can create a nicer representation for printing by writing a `__str__` method for the class. In Python, there are special methods associated with classes which you can use for customization. These are also called "magic" methods. They exist inside a class, and begin and end with two underscores (`__`). The `__init__` we have already used is a magic method used to set initial properties of a class instance. The `__str__` method is called by built-in Python functions `print()` and `format()`. The return value of this function *must* be a string. 
 
-The `__str__` method is simply a method to compute the string representation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification. Let's add this to our class definition, making the whole definition look like the following
+The `__str__` method is simply a method to generate the string representation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification. Let's add this to our class definition, making the whole definition look like the following
 
 ~~~
 class Molecule:
@@ -190,7 +194,7 @@ symbols: ['He']
 ~~~
 {: .language-output}
 
-The construction and use of an object constructed through a class is simpler and more intuitive that trying to construct one from an arbitrary set of variables.
+The construction and use of an object constructed through a class is simpler and more intuitive than trying to construct one from an arbitrary set of variables.
 Now anytime we wish to create a new molecule object and print out its values, we only require two new lines of code.
 
 > ## Check your understanding

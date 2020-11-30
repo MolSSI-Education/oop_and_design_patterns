@@ -20,13 +20,6 @@ Each object will consist of three main types of information:
 2. Data - Each object may have data relevant to the object. These are often stored as variables within the object itself. Data is often assigned values through the constructor, meaning each instance of an object may have different values assigned to its data.
 3. Methods - Functions defined within a class are usually called methods. Similar to functions, they have a name, a set of zero or more parameters, and optionally a return value. Methods usually operate on the data within an object, sometimes utilizing information provided from outside the object.
 
-[comment]: <> re-write this sections
-[comment]: <> By defining our code within objects, we can gain a number of benefits:
-[comment]: <> * Objects can be used to simplify the creation of multiple similar objects.
-[comment]: <> * Objects can be extended to create new variations of similar objects.
-[comment]: <> * Objects can be used as data in new object definitions.
-
-
 Four main concepts of OOP covered in these lessons are:
 * Encapsulation - Enclosing data and methods within an object.
 * Data Abstraction - Securing variables within objects so they are safe from outside interference.
