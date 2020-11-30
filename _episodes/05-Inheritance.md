@@ -221,3 +221,17 @@ The main difference is the ownership of the object.
 
 Consider the university example we have been using. A university has a large number of students and faculty, but they are not owned by the university. If the university closes, the students and faculty still exist, they just attend or work for a different university. A university is an aggregation of students and faculty.
 A university owns courses, if the university closes then the courses cease to exist. A university is composed of courses.
+
+Currently, the Faculty and Students use courses as strings, let us consider extending the courses into its own class.
+~~~
+class Course:
+    def __init__(self, name, description, prerequisitess):
+        self.name = name
+        self.description = description
+        self.prerequisitess = prerequisitess
+~~~
+{: .language-python}
+
+Here we have a `Course` that consists of a `name` for the course, a `description` for the course, and a list of `prerequisitess` courses that need to be taken.
+
+Now when we look at our `Faculty` class, we see that each Faculty member has a number of courses assigned to them and we utilize the `Course` class to define what each course is. The Faculty member is using the courses, but does not have ownership of them. If the Faculty member leaves the university, the courses will persist and be passed to a new Faculty member to cover. This is an example of aggregation.
