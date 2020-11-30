@@ -1,8 +1,5 @@
-# FIXME Lesson title
+# MolSSI Software Design Lessons
 
-[![Create a Slack Account with us](https://img.shields.io/badge/Create_Slack_Account-The_Carpentries-071159.svg)](https://swc-slack-invite.herokuapp.com/)
-
-FIXME
 
 ## Contributing
 
@@ -15,14 +12,5 @@ how to write new episodes.
 
 ## Maintainer(s)
 
-* FIXME
-
-## Authors
-
-A list of contributors to the lesson can be found in [AUTHORS](AUTHORS)
-
-## Citation
-
-To cite this lesson, please consult with [CITATION](CITATION)
-
-[lesson-example]: https://carpentries.github.io/lesson-example
+* Samuel Ellis
+* Eliseo Marin-Rimoldi
