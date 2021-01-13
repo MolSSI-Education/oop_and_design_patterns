@@ -138,12 +138,7 @@ class Person:
         self.id = self.generate_id()
     
     def generate_id(self):
-        id_hash = 0
-        for s in self.name:
-            id_hash += ord(s)
-        for s in self.surname:
-            id_hash *= ord(s)
-        return id_hash % 1000000000
+       return hash(self.name+self.surname) % 1000000000
     
     def __str__(self):
         return f'{self.surname}, {self.name}\tID: {self.id}'
