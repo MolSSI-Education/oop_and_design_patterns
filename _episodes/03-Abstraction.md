@@ -1,9 +1,9 @@
 ---
-title: "Data Abstraction"
+title: "Abstraction"
 teaching: 0
 exercises: 0
 questions:
-- "What is Data Abstraction?"
+- "What is Abstraction?"
 - "Why should I care about Data Abstraction?"
 objectives:
 - "Understand the concepts behind Data Abstraction."
@@ -13,29 +13,40 @@ keypoints:
 ---
 
 {% include links.md %}
-## Data Abstraction
+## Abstraction
 
-<!--- Private vs Public --->
-<!--Data abstraction is the concept of hiding variables behind methods to simplify code, increase development efficiency and improve security. -->
+Abstraction is the concept of hiding implementation details from the user, allowing them to know how to use the code/class without knowing how it actually works or any implementation details. For example,  when you use a Coffee machine, you interact with its interface, but you don't actually know how it is preparing the coffee inside. Another example is that when a Web browser connects to the Internet, it interacts with the Operating system to get the connection, but it doesn't know if you are connecting using a dial-up, dsl, cable, etc.
 
-Data abstraction is the concept of hiding implementation details from the user, allowing them to know how to use the code/class without knowing how it actually works or any implementation details. For example,  when you use a Coffee machine, you interact with its interface, but you don't actually know how it is preparing the coffee inside. Another example is that when a Web browser connects to the Internet, it interacts with the Operating system to get the connection, but it doesn't know if you are connecting using a dial-up, dsl, cable, etc.
-
-Clearly there are many benefits of using data abstraction:
+There are many benefits of using abstraction:
 1. Can have multiple implementations
 2. Can build complex software by splitting functionality internally into steps, and only exposing one method to the user
 3. Change implementation later without affecting the user by moving frequently changing code into separate methods.
 4. Easier code collaboration since developers don't need to know the details of every class, only how to use it.
 5. One of the main concepts that makes the code flexible and maintainable.
 
-In Python, data abstraction can be achieved by the use of private and public attributes and methods.
-
+In Python, abstraction can be achieved by the use of private and public attributes and methods.
 
 Generally, variables can be public, in which case they are directly modifiable, or private, meaning interaction with their values is only possible through internal class methods.
 In python, there are no explicitly public or private variables, all variables are accessible within an object.
 However, the predominantly accepted practice is to treate names prefixed with an underscore as non-public. (See [Python Private Variables](https://docs.python.org/3/tutorial/classes.html#private-variables))
 
 ### Private Data
-The best way to achieve data abstraction of a variable in python is to use the '@property' decorator, and the 'setter' decorator. These allow attributes to be used in a pythonic way, while allowing more control over their values.
+Making data private is a way to protect a user from creating errors by hiding sensitive variables. We can utilize our previously defined `Molecule` class to provide an example.
+`Molecule` is currently defined as:
+~~~
+class Molecule:
+    def __init__(self, name, charge, symbols, coordinates):
+        self.name = name
+        self.charge = charge
+        self.symbols = symbols
+        self.coordinates = coordinates
+		
+    def __str__(self):
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}'
+~~~
+{: .language-python}
+
+The best way to achieve abstraction of a variable in python is to use the '@property' decorator, and the 'setter' decorator. These allow attributes to be used in a pythonic way, while allowing more control over their values.
 Consider our Molecule class:
 ~~~
 class Molecule:
