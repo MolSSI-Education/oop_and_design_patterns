@@ -24,7 +24,8 @@ It means all of the information about that object is grouped into a single locat
 The methods they can use will be located within the class of the object.
 3. It enables data security.
 A developer can restrict access to data within a class through specific methods.
-4. Methods have full access to their data so that you don’t have to keep passing data and parameters between methods. Also, this way, you avoid the use of global variables, which while useful, can lead to some issues such as name collision.
+4. Methods have full access to their data so that you don’t have to keep passing data and parameters between methods.
+Also, this way, you avoid the use of global variables, which while useful, can lead to some issues such as name collision.
 
 
 Classes are used in code to provide a general definition of an object.
@@ -85,7 +86,8 @@ In addition, the room for errors with naming grows for each new instance.
 Each molecule has four variables that need to be correctly named or they will not make sense.
 
 Encapsulation is designed to solve this problem.
-We can create something called a *class* to hold our molecule information. Classes provide a way to bundle data and other functionality together. 
+We can create something called a *class* to hold our molecule information.
+Classes provide a way to bundle data and other functionality together. 
 
 ## Class Syntax
 Python allows for the creation of classes. We define a `Molecule` class.
@@ -99,7 +101,8 @@ class Molecule:
 ~~~
 {: .language-python}
 
-`Molecule` is a class that contains all the pieces of data we are currently associating with molecules. Let's look at what each line does.
+`Molecule` is a class that contains all the pieces of data we are currently associating with molecules.
+Let's look at what each line does.
 
 The first line of this code
 ~~~
@@ -129,14 +132,19 @@ The next four lines
 {: .language-python}
 set the value of the local object variables to the value of the parameters passed into the constructor.
 Any time you want to set or create a variable associated with a class in its definition, you use this syntax. 
-We can now use this class definition in our code. For example, to create our water molecule, we use the class. This is called creating an *instance* of the class.
+We can now use this class definition in our code.
+For example, to create our water molecule, we use the class.
+This is called creating an *instance* of the class.
 
 ~~~
 mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"], coordinates=[[0,0,0],[0,1,0],[0,0,1]])
 ~~~
 {: .language-python}
 
-`mol1` in our code is now an object. Note that we do not pass a value to be assigned to `self` as python will automatically fill in the value for that variable when it calls `__init__()`. We can access the variables associated with this instance of the molecule class using a dot notation. Variables associated with a class are also called `attributes`.
+`mol1` in our code is now an object.
+Note that we do not pass a value to be assigned to `self` as python will automatically fill in the value for that variable when it calls `__init__()`.
+We can access the variables associated with this instance of the molecule class using a dot notation.
+Variables associated with a class are also called `attributes`.
 
 ~~~
 print(mol1.charge)
@@ -156,13 +164,17 @@ water molecule
 {: .output}
 
 > ## Check your understanding
-> Create another instance of the class called `mol2`. This molecule should be a recreation of the above He molecule. After you have created this, print the molecule name and charge.
+> Create another instance of the class called `mol2`.
+This molecule should be a recreation of the above He molecule.
+After you have created this, print the molecule name and charge.
 >> ## Solution
 >> ~~~
 >> mol2 = Molecule(name="He", charge=0.0, symbols=["He"], coordinates=[[0,0,0]])
 >> ~~~
 >> {: .language-python}
->> Following the syntax from creating the first molecule, we assign a variable name, and set it equal to a call to the Molecule class. We then assign each value to the variables in the constructor. We can then simply print both values.
+>> Following the syntax from creating the first molecule, we assign a variable name, and set it equal to a call to the Molecule class.
+We then assign each value to the variables in the constructor.
+We can then simply print both values.
 >>
 >> ~~~
 >> print(mol2.name)
@@ -202,7 +214,8 @@ They exist inside a class, and begin and end with two underscores (`__`).
 The `__init__` we have already used is a magic method used to set initial properties of a class instance.
 The `__str__` method is called by built-in Python functions `print()` and `format()`. The return value of this function *must* be a string. 
 
-The `__str__` method is simply a method to generate the string representation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification. Let's add this to our class definition, making the whole definition look like the following
+The `__str__` method is simply a method to generate the string representation of our Molecule object to be used in printing, similar to how we defined it without any class, but it now will work for each instance of a Molecule without any modification.
+Let's add this to our class definition, making the whole definition look like the following
 
 ~~~
 class Molecule:
