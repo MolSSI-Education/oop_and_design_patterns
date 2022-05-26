@@ -17,221 +17,163 @@ Inheritance is the principle of extending a class to add capabilities without mo
 We call the class that is being inherited the parent, and the class that is inheriting the child.
 The child class obtains the properties and behaviors of its parent unless it overrides them.
 
-In coding terms, this means a class that inherits from a parent class by default will contain all of the data variables and methods of the parent class.
+In coding terms, this means a class that inherits from a parent class will contain all of the data variables and methods of the parent class by default.
 The child class can either utilize the methods as is or they can override the methods to modify their behavior without affecting the parent class or any objects that have instantiated that class.
 
 Using inheritance in code development creates a hierarchy of objects, which often improves the readability of your code.
 It also saves time end effort by avoiding duplicate code production, i.e., inheriting from classes that have similar behavior and modifying them instead of writting a new class from scratch.
 
-Let us consider an example of a records system for a university.
-A university has a large number of people, whether they are students or faculty.
-We will start by creating some classes for each of these types of people.
-First is a student class, at its simplest, a student has a name, a surname, and maybe a set of courses that they are registered for. Lets create a student class that takes a name and surname as parameters.
+We can utilize our `Molecule` class to create an example.
+Of note, we are using the version prior to applying name mangling.
+Since name mangling is applied based on the class it is defined in and not where it is called from, it will cause issues with inheritance.
 ~~~
-class Student:
-    def __init__(self, name, surname):
+class Molecule:
+    def __init__(self, name, charge, symbols, coordinates):
         self.name = name
-        self.surname = surname
-        self.courses = []
-~~~
-{: .language-python}
-Methods that only act upon the students data should be contained by the student class, this helps structure the methods in a more readible and accessible way.
-Lets add three methods, a method to enroll a student in a course, a method to let the student drop a course, and the built in `__str__` method for the student class.
-~~~
-class Student:
-    def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
-        self.courses = []
+        self.charge = charge
+        self.symbols = symbols
+        self.coordinates = coordinates
 
-    def enroll(self, new_course):
-        self.courses.append(new_course)
-~~~
-{: .language-python}
-It is often useful to generate a string representation of our class, so we want to override the built in method `__str__`.
-~~~
-class Student:
-    def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
-        self.courses = []
-
-    def enroll(self, new_course):
-        self.courses.append(new_course)
+    @property
+    def symbols(self):
+        return self._symbols
         
+    @symbols.setter
+    def symbols(self, symbols):
+        self._symbols = symbols
+        self._update_num_atoms()
+
+    def _update_num_atoms(self):
+        self.num_atoms = len(self.symbols)
+
     def __str__(self):
-        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
 ~~~
 {: .language-python}
 
-> ## Check your understanding
-> Add an additional method to the Student class to remove a course from the students enrolled courses.
->> ## Solution
->> ~~~
->> class Student:
->>     def __init__(self, name, surname):
->>         self.name = name
->>         self.surname = surname
->>         self.courses = []
->>
->>     def enroll(self, new_course):
->>         self.courses.append(new_course)
->>
->>     def drop_course(self, course):
->>         self.courses.remove(course)
->>
->>     def __str__(self):
->>         return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
->> ~~~
->> {: .language-python}
-> {: .solution}
-{: .challenge}
+Currently the `Molecule` class takes in lists for both `symbols` and `coordinates`, relying on the indexes of each list to tie the appropriate atom symbol to it's coordinates.
+Depending on your software's needs, it may be more appropriate to store each atom as an object, allowing the `Molecule` class to store a list of atoms.
 
-Similar to the student, lets build a Faculty class to represent the instructors of the university.
-Like the students, they have a name and a surname, but unlike the student they have a position denoting if they are a professor or lecturer and a salary.
+A simple `Atom` class may look like the following:
 ~~~
-class Faculty:
-    def __init__(self, name, surname, position, salary):
+class Atom:
+    def __init__(self, name, symbol, number, mass, coordinates):
         self.name = name
-        self.surname = surname
-        self.position = position
-        self.salary = salary
-        self.courses = []
-        
-    def __str__(self):
-        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
-~~~
-{: .language-python}
-Like a student, a faculty has a set of courses, so we need to have methods to assign and unassign courses from their teaching load.
-~~~
-class Faculty:
-    def __init__(self, name, surname, position, salary):
-        self.name = name
-        self.surname = surname
-        self.position = position
-        self.salary = salary
-        self.courses = []
-        
-    def assign_course(self, new_course):
-        self.courses.append(new_course)
-    
-    def unassign_course(self, course):
-        self.courses.remove(course)
-        
-    def __str__(self):
-        return f'{self.surname}, {self.name}\nCourses:\n{self.courses}'
-~~~
-{: .language-python}
-Having built both a Student class and a Faculty class, notice the similarities between the two.
-For variables, both classes have a name, a surname, and a set of courses.
-For methods, both classes have a similar `__init__` method and a similar `__str__` method.
-What if we want to add a new method to both classes? Consider a university ID number; most, if not all, universities generate id numbers for their students, faculty, and staff to avoid ambiguity that can arise from similar names.
-
-If we want to add a new method to generate the id number of a given student or faculty, we have to add the method to both classes, which is duplicating the code in multiple places. This leads to more work for no tangible gain, not to mention, leads to multiple opportunities for mistakes to be made.
-We can use inheritance to combat these problems.
-We want to make a person class that contains the similarities of each class to act as their parent.
-~~~
-class Person:
-    def __init__(self, name, surname):
-        self.name = name
-        self.surname = surname
-        self.id = self.generate_id()
-    
-    def generate_id(self):
-       id_hash = 0
-        for s in self.name:	
-            id_hash += ord(s)	
-        for s in self.surname:	
-            id_hash *= ord(s)	
-        return id_hash % 1000000000
-    
-    def __str__(self):
-        return f'{self.surname}, {self.name}\tID: {self.id}'
+        self.symbol = symbol
+        self.number = number
+        self.mass = mass
+        self.coordinates = coordinates
 ~~~
 {: .language-python}
 
-Now we can make the student class a child of the person class.
+Given this `Atom` class, we have a few possibilities for incorporating it into the Molecule class.
+We could try and make the `symbols`, `coordinates`, and `atoms` variables optional and rely on keyword arguments to properly assign them in the constructor.
+Alternatively we could utilize inheritance to extend the behavior of the `Molecule` class while preserving its behavior.
+
+To do so, we can create a new class called `AtomMolecule`.
+First, let us look at just the class definition and the constructor.
 ~~~
-class Student(Person):
-    def __init__(self, name, surname):
-        self.courses = []
-        super().__init__(name, surname)
-    
-    def __str__(self):
-        return super().__str__() + f'\nCourses:\n{self.courses}'
-        
-    def enroll(self, new_course):
-        self.courses.append(new_course)
-        
-    def drop_course(self, course):
-        self.courses.remove(course)
+class AtomMolecule(Molecule):
+    def __init__(self, name, charge, atoms):
+        self.atoms = atoms
+        super().__init__(name, charge, self.symbols, self.coordinates)
 ~~~
 {: .language-python}
-In both the `__init__` and `__str__` methods, we are using `super()`, which references the parent class of student, in this case Person, and calls the `__init__` and `__str__` methods to help initialize the class.
-`super().__init__(name,surname)` tells python to call the `__init__` method of the parent class to initialize the name and surname variables. Now any changes to Person's `__init__` will also update the Student's `__init__`.
 
-> ## Check your understanding
-> Update the Faculty class to use the Person class as a parent.
->> ## Solution
->> ~~~
->> class Faculty(Person):
->>     def __init__(self, name, surname, position, salary):
->>         self.position = position
->>         self.salary = salary
->>         self.courses = []
->>         super().__init__(name, surname)
->>  
->>     def __str__(self):
->>         return super().__str__() + f'\nCourses:\n{self.courses}'
->>  
->>     def assign_course(self, new_course):
->>         self.courses.append(new_course)
->>  
->>     def unassign_course(self, course):
->>         self.courses.remove(course)
->> ~~~
->> {: .language-python}
-> {: .solution}
-{: .challenge}
+Notice that after the class name, we have now included `(Molecule)`.
+Python uses the above syntax to specify inheritance.
+The class definition specifies that `AtomMolecule` should inherit the data and methods from its parent class `Molecule`.
 
-We initially created the person class to simplify the method to generate ids, but that method is not present in either class.
-This is because both classes inherit the generate_id method from the Person class. Since they are not modifying the method, it does not need to appear within either child.
-However, we can test the method to make sure it is working.
+As far as the constructor is concerned, we are not passing in a set of symbols or coordinates, as those are both derived from the set of atoms.
+We set the given list of atoms to the instance variable `self.atoms`.
+Finally, we are utilizing the `__init__()` method from the parent class.
+The syntax `super().` is telling python where to look to find `__init__()`, so that it searches in the parent class.
+
+If you try and run just this code and create an `AtomMolecule`, you will run into some errors.
+Even though we are inheriting from `Molecule`, `AtomMolecule` has no understanding of `symbols`, so we cannot use the constructor.
+A solution to this is to add a setter and property for atoms so we can control how `atoms` is updated.
+When `atoms` is updated, we need to update both `symbols` and `coordinates`.
+Here is one option for how to generate the values for `symbols`:
 ~~~
-student1 = Student("John", "Smith")
-print(student1)
+def _update_symbols(self):
+        list_symbols = []
+        for atom in self.atoms:
+            list_symbols.append(atom.symbol)
+        self._symbols = list_symbols
 ~~~
 {: .language-python}
-gives the output:
+which iterates through each atom and appends the symbol to the list.
+Adding a similar function for `coordinates` creates the complete class.
 ~~~
-Smith, John	ID: 546320160
-Courses:
-[]
+class AtomMolecule(Molecule):
+    def __init__(self, name, charge, atoms):
+        self.atoms = atoms
+        super().__init__(name, charge, self.symbols, self.coordinates)
+
+    @property
+    def atoms(self):
+        return self._atoms
+
+    @atoms.setter
+    def atoms(self, atoms):
+        self._atoms = atoms
+        self._update_symbols()
+        self._update_coordinates()
+
+    def _update_symbols(self):
+        list_symbols = []
+        for atom in self.atoms:
+            list_symbols.append(atom.symbol)
+        self._symbols = list_symbols
+
+    def _update_coordinates(self):
+        list_coordinates = []
+        for atom in self.atoms:
+            list_coordinates.append(atom.coordinates)
+        self.coordinates = list_coordinates
+~~~
+{: .language-python}
+
+To test it we can create a set of atoms to pass into an `AtomMolecule`:
+~~~
+oxygen = Atom("oxygen", "O", 8, 15.999, [0,0,0])
+hydrogen1 = Atom("hydrogen", "H", 1, 1.00784, [0,1,0])
+hydrogen2 = Atom("hydrogen", "H", 1, 1.00784, [0,0,1])
+
+mol1 = AtomMolecule(name='water molecule', charge=0.0, atoms=[oxygen, hydrogen1, hydrogen2])
+print(mol1)
+~~~
+{: .language-python}
+~~~
+name: water molecule
+charge: 0.0
+symbols: ['O', 'H', 'H']
+coordinates: [[0, 0, 0], [0, 1, 0], [0, 0, 1]]
+number of atoms: 3
 ~~~
 {: .language-output}
-The generate_id method is called in the `__init__` method of Person, so each Student and Faculty will autimatically generate their id upon initialization.
 
-We can create further classes that inherit from person to cover different people at the university, such as Staff.
+We can see in the output that `AtomMolecule` is correctly printing out the contents of the molecule, but we have not defined a `__str__()` method.
+Since `AtomMolecule` is inheriting from `Molecule`, it is inheriting all of the methods defined in `Molecule`.
+As a dictionary based language, when you call a method, python will first look in the object you are calling the method from.
+If it is unable to find the method, it will attempt to look in the parent class of the object.
+It will continue looking up through the inheritance tree until it either finds the method or runs out of parents to look in.
+
+Similarly, we did not add a setter for `symbols` in `AtomMolecule`, yet the number of atoms was correctly set, since we inherited the property and setter methods from `Molecule`.
+
+By creating `AtomMolecule`, we have extended the behavior of `Molecule`.
+Instead of only working with a set of symbols and coordinates, we are now capable of working with a set of `Atom` objects.
+Note that the external behavior/functionality of `AtomMolecule` is still identical to `Molecule`, but the internal operations are different to adjust to different input.
 
 ### Composition and Aggregation
-In addition to primitive types, variables in a class can be instances of different classes.
-This can often be useful to group relevant data together within a class, such as the molecule class in the Encapsulation lesson, or because a class needs to have ownership of other objects.
+When creating `AtomMolecule`, we used a type of object inside another object.
+We grouped a set of related data together through encapsulation, then utilized the created object in another class.
 There are two different forms that this can take, Composition and Aggregation.
 The main difference is the ownership of the object.
 
-Consider the university example we have been using. A university has a large number of students and faculty, but they are not owned by the university. If the university closes, the students and faculty still exist, they just attend or work for a different university. A university is an aggregation of students and faculty.
-A university owns courses, if the university closes then the courses cease to exist. A university is composed of courses.
+With the current example of `AtomMolecule`, we are creating `Atoms` and passing them into the object.
+If the `AtomMolecule` object was deleted, the defined `Atoms` would persist.
+This is an example of aggregation.
+The `AtomMolecule` object is using the `Atoms`, but it does not have ownership of them.
 
-Currently, the Faculty and Students use courses as strings, let us consider extending the courses into its own class.
-~~~
-class Course:
-    def __init__(self, name, description, prerequisitess):
-        self.name = name
-        self.description = description
-        self.prerequisitess = prerequisitess
-~~~
-{: .language-python}
-
-Here we have a `Course` that consists of a `name` for the course, a `description` for the course, and a list of `prerequisitess` courses that need to be taken.
-
-Now when we look at our `Faculty` class, we see that each Faculty member has a number of courses assigned to them and we utilize the `Course` class to define what each course is. The Faculty member is using the courses, but does not have ownership of them. If the Faculty member leaves the university, the courses will persist and be passed to a new Faculty member to cover. This is an example of aggregation.
+If, instead, we had the `Molecule` class create atoms from the set of symbols and coordinates, the `Molecule` class would own the `Atoms`, which would be an example of composition.
