@@ -22,113 +22,100 @@ Duck typing is more of a passive concept, we assume objects of certain types can
 
 Polymorphism is the practice of making sure duck typing will work.
 
-We will use the three classes defined in the `Inheritance` lessons, `Person`, `Faculty`, and `Student` to create an example of this behaviour.
+We will use the two classes, `Molecule` and `AtomMolecule` to create an example of polymorphism.
 
-First we will restate the three classes here. First the parent class Person.
-
+First we will restate the two classes here.
 ~~~
-class Person:
-    def __init__(self, name, surname):
+class Molecule:
+    def __init__(self, name, charge, symbols, coordinates):
         self.name = name
-        self.surname = surname
-        self.id = self.generate_id()
-    
-    def generate_id(self):
-        id_hash = 0
-        for s in self.name:
-            id_hash += ord(s)
-        for s in self.surname:
-            id_hash *= ord(s)
-        return id_hash % 1000000000
-    
-    def __str__(self):
-        return f'{self.surname}, {self.name}\tID: {self.id}'
-~~~
-{: .language-python}
+        self.charge = charge
+        self.symbols = symbols
+        self.coordinates = coordinates
 
-Then the two child classes, Faculty and Student.
-~~~
-class Faculty(Person):
-    def __init__(self, name, surname, position, salary):
-        self.position = position
-        self.salary = salary
-        self.courses = []
-        super().__init__(name, surname)
-
-    def __str__(self):
-        return super().__str__() + f'\nCourses:\n{self.courses}'
-
-    def assign_course(self, new_course):
-        self.courses.append(new_course)
-
-    def unassign_course(self, course):
-        self.courses.remove(course)
-
-class Student(Person):
-    def __init__(self, name, surname):
-        self.courses = []
-        super().__init__(name, surname)
-    
-    def __str__(self):
-        return super().__str__() + f'\nCourses:\n{self.courses}'
+    @property
+    def symbols(self):
+        return self._symbols
         
-    def enroll(self, new_course):
-        self.courses.append(new_course)
-        
-    def drop_course(self, course):
-        self.courses.remove(course)
-~~~
-{: .language-python}
+    @symbols.setter
+    def symbols(self, symbols):
+        self._symbols = symbols
+        self._update_num_atoms()
 
-Since `Faculty` and `Student` are both children of the `Person` class, take note that they both share a `name`, `surname`, and a `id` with their parent.
-To ensure that both children are polymorphic, we want to ensure that any method that operates on a `Person` will correctly operate on them as well.
+    def _update_num_atoms(self):
+        self.num_atoms = len(self.symbols)
 
-Here we will build a simple method that utilizes variables of a `Person` to provide a formatted output.
-
-~~~
-def formatted_person_print(person):
-    print(f'{person.id}\n{person.name} {person.surname}')
-~~~
-{: .language-python}
-
-We will create a person use them in our method.
-
-~~~
-person_example = Person('John', 'Smith')
-print(person_example)
+    def __str__(self):
+        return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
 ~~~
 {: .language-python}
 ~~~
-Smith, John     ID: 546320160
+class AtomMolecule(Molecule):
+    def __init__(self, name, charge, atoms):
+        self.atoms = atoms
+        super().__init__(name, charge, self.symbols, self.coordinates)
+
+    @property
+    def atoms(self):
+        return self._atoms
+
+    @atoms.setter
+    def atoms(self, atoms):
+        self._atoms = atoms
+        self._update_symbols()
+        self._update_coordinates()
+
+    def _update_symbols(self):
+        list_symbols = []
+        for atom in self.atoms:
+            list_symbols.append(atom.symbol)
+        self._symbols = list_symbols
+
+    def _update_coordinates(self):
+        list_coordinates = []
+        for atom in self.atoms:
+            list_coordinates.append(atom.coordinates)
+        self.coordinates = list_coordinates
+~~~
+{: .language-python}
+
+Since `AtomMolecule` is a child of the `Molecule` class, take note that they both share a many variable names..
+To ensure that `AtomMolecule` is polymorphic, we want to ensure that any method that operates on a `Molecule` will correctly operate on an instance of `AtomMolecule` as well.
+
+Here we will build a simple method that utilizes variables of a `Molecule` to provide a formatted output.
+
+~~~
+def formatted_print(molecule):
+    return f'{molecule.name} is made of {molecule.symbols} and has an atomic charge of {molecule.charge}'
+~~~
+{: .language-python}
+
+We will create a `Molecule` to provide to the method.
+
+~~~
+mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"], coordinates=[[0,0,0],[0,1,0],[0,0,1]])
+formatted_print(mol1)
+~~~
+{: .language-python}
+~~~
+"water molecule is made of ['O', 'H', 'H'] and has an atomic charge of 0.0"
 ~~~
 {: .language-output}
 
-Using out new method on this person we get our new format.
+For `AtomMolecule` to be polymorphic, it should also work with the method.
+
 ~~~
-formatted_person_print(person_example)
+oxygen = Atom("oxygen", "O", 8, 15.999, [0,0,0])
+hydrogen1 = Atom("hydrogen", "H", 1, 1.00784, [0,1,0])
+hydrogen2 = Atom("hydrogen", "H", 1, 1.00784, [0,0,1])
+
+mol2 = AtomMolecule(name='water molecule', charge=0.0, atoms=[oxygen, hydrogen1, hydrogen2])
+formatted_print(mol2)
 ~~~
 {: .language-python}
 ~~~
-546320160
-John Smith
+"water molecule is made of ['O', 'H', 'H'] and has an atomic charge of 0.0"
 ~~~
 {: .language-output}
 
-For `Faculty` and `Student` to be polymorphic, they should both work with this method.
-
-~~~
-faculty_example = Faculty('Jane', 'Doe', 'Department Chair', 160000)
-student_example = Student('James', 'Smith')
-formatted_person_print(faculty_example)
-formatted_person_print(student_example)
-~~~
-{: .language-python}
-~~~
-291216936
-Jane Doe
-167856640
-James Smith
-~~~
-{: .language-output}
-
-We have properly made the two children polymorphic. Any method that utilizes `Person` objects should be able to use objects of either `Faculty` or `Student`. This allows us to extend the behaviour of a `Person` without breaking any code that relies on it.
+We have properly made `AtomMolecule` polymorphic. Any method that utilizes `Molecule` objects should be able to use `AtomMolecule` objects. This allows us to extend the behaviour of a `Molecule` without breaking any code that relies on it.
