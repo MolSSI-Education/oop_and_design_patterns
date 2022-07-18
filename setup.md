@@ -25,7 +25,7 @@ We are utilizing two Molecular Dynamics packages to show examples of some of the
 To start, open an Anaconda prompt.
 Then enter 
 ~~~
-conda create --name design_patterns python=3.7
+conda create --name design_patterns python=3.9
 ~~~
 {: .bash}
 
