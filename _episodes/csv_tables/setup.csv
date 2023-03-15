@@ -1,0 +1,4 @@
+Lesson Title,Questions,Objectives
+`Setup <setup.html>`_,"* How do I set up my computer for the lessons?", "* Install anaconda for creating virtual environments.
+* Install lesson requirements in a conda environment.
+* Obtain lesson example materials."

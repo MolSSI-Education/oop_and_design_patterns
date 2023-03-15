@@ -1,0 +1,17 @@
+Lesson Title,Questions,Objectives
+`Design Patterns <07-introduction.html>`_,"* What are Design Patterns?", "* A brief introduction to the types of Design Patterns."
+`Adapter <08-Adapter.html>`_,"* How can we utilize pre-existing code without modifying it?", "* Learn the Adapter Design Pattern.
+* See an example of the Adapter Design Pattern relavant to the Computational Molecular Sciences domain."
+`Factory <09-Factory.html>`_,"* How can a method or class defer instantiation to subclasses?", "* Learn the factory design pattern.
+* See an example of the factory design pattern relavant to the Computational Molecular Sciences domain."
+`Visitor <10-Visitor.html>`_,"* How to separate the methods from the objects that use them?", "* Understand the visitor design pattern.
+* Show an example of the visitor design pattern relavant to the Computational Molecular Sciences domain. "
+`Factory Second Example <11-Factory_Potential.html>`_,"* How can a method or class defer instantiation to subclasses?", "* Learn the factory design pattern.
+* See an example of the factory design pattern relavant to the Computational Molecular Sciences domain."
+`Facade <12-Facade.html>`_,"* How can we simplify the interface to a subsystem?", "* Learn the Facade Design Pattern.
+* See an example of the Facade Design Pattern relavant to the Computational Molecular Sciences domain."
+`Observer <13-Observer.html>`_,"* How can an object notify its own state to an open-ended number of objects?", "* Learn the observer design pattern.
+* See an example of the observer design pattern relavant to the Computational Molecular Sciences domain."
+`Composite <14-Composite.html>`_,"* How to compose objects into tree structures?
+* How to define a common interface for branches and leaves within a tree?", "* Understand the composite design pattern.
+* Show an example of the composite design pattern relavant to the Computational Molecular Sciences domain."

@@ -1,14 +1,17 @@
----
-title: Setup
-questions:
-- "How do I setup my computer for the lessons?"
-objectives:
-- "Install anaconda for creating virtual environments."
-- "Install lesson requirements in a conda environment."
-- "Obtain lesson example materials."
-keypoints:
-- ""
----
+# Setup
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How do I setup my computer for the lessons?
+
+Objectives:
+- Install anaconda for creating virtual environments.
+- Install lesson requirements in a conda environment.
+- Obtain lesson example materials.
+````
+
 ## Installing Python through Anaconda
 [Python](https://python.org/) is a popular language for scientific computing, and great for general-purpose programming as well. Installing all of its scientific packages individually can be a bit difficult, however, so we recommend the all-in-one installer Anaconda.
 
@@ -32,28 +35,40 @@ We are utilizing two Molecular Dynamics packages to show examples of some of the
 
 To start, open an Anaconda prompt.
 Then enter 
-~~~
+````{tab-set-code} 
+
+```{code-block} shell
 conda create --name design_patterns python=3.9
-~~~
-{: .bash}
+```
+````
+
 
 Enter `Y` to continue.
 
 We now need to activate our new environment.
-~~~
+````{tab-set-code} 
+
+```{code-block} shell
 $ conda activate design_patterns
-~~~
-{: .bash}
+```
+````
+
 
 Then we will install MDAnalysis and MDTraj.
-~~~
+````{tab-set-code} 
+
+```{code-block} shell
 $ conda install -c conda-forge mdanalysis
-~~~
-{: .bash}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} shell
 $ conda install -c conda-forge mdtraj
-~~~
-{: .bash}
+```
+````
+
 
 We have included a sample trajectory file to use with the example design patterns.
 The [trajectory] was extracted from the [MDAnalysisTests]
