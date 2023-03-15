@@ -112,13 +112,13 @@ html_favicon = "_static/molssi_square.png"
 # documentation.
 #
 html_theme_options = {
-	"github_url": "https://github.com/jchen0506/molssi_doc_theme",
+	"github_url": "https://github.com/MolSSI-Education/oop_and_design_patterns",
 	"twitter_url": "https://twitter.com/MolSSI_NSF",
 
 	"logo": {
       "image_light": "_static/molssi_main_logo.png",
       "image_dark": "_static/molssi_main_logo_inverted_white.png",
-      "text": "MolSSI Object Oriented Programming and Design Patterns",
+      "text": "",
       "molssi_light": "molssi_main_logo.png",
       "molssi_dark": "molssi_main_logo_inverted_white.png",
     },
