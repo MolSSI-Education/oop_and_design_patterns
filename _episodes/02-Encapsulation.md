@@ -320,7 +320,11 @@ This removes much of the redundancy of creating multiple variables and removes m
 In summary, utilizing encapsulation to wrap up the data and methods that act on them has provided a number of benefits.
 We have reduced developer work by removing redundancy.
 We have reduced the likelihood of errors appearing in the syntax written by reducing the number of possible locations for human error.
-The next lesson will cover abstraction to show how encapsulation can improve the security of your code.````{admonition} Key Points
+The next lesson will cover abstraction to show how encapsulation can improve the security of your code.
+
+## Key Points
+
+````{admonition} Key Points
 :class: key
 
 - Encapsulation is the practice of enclosing data and functions in a class.
