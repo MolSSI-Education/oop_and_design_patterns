@@ -124,6 +124,7 @@ html_theme_options = {
     },
 	"show_toc_level": 2,
 	"header_links_before_dropdown": 4,
+	"google_analytics_id": "G-FHKVGE8HKZ",
 	"external_links": [
       {"name": "MolSSI", "url": "https://molssi.org"}
   ],
