@@ -1,9 +1,6 @@
 Object Oriented Programming and Design Patterns
 ------------------------------------------------
 
-This is a template showing the structure that should be adopted for adapting MolSSI lessons from the old Software Carpentry template
-to the new Sphinx theme.
-
 .. admonition:: Prerequisites
    :class: attention
 
