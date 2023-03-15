@@ -1,16 +1,16 @@
----
-title: "Inheritance"
-teaching: 0
-exercises: 0
-questions:
-- "What is Inheritance?"
-- "Why should I use Inheritance in my code?"
-objectives:
-- "Understand the concepts behind Inheritance."
-keypoints:
-- "Parent vs Child classes"
-- ""
----
+# Inheritance
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- What is Inheritance?
+- Why should I use Inheritance in my code?
+
+Objectives:
+- Understand the concepts behind Inheritance.
+````
+
 
 ## Inheritance
 Inheritance is the principle of extending a class to add capabilities without modifying the original class.
@@ -26,7 +26,9 @@ It also saves time end effort by avoiding duplicate code production, i.e., inher
 We can utilize our `Molecule` class to create an example.
 Of note, we are using the version prior to applying name mangling.
 Since name mangling is applied based on the class it is defined in and not where it is called from, it will cause issues with inheritance.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -48,14 +50,17 @@ class Molecule:
 
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
-~~~
-{: .language-python}
+```
+````
+
 
 Currently the `Molecule` class takes in lists for both `symbols` and `coordinates`, relying on the indexes of each list to tie the appropriate atom symbol to it's coordinates.
 Depending on your software's needs, it may be more appropriate to store each atom as an object, allowing the `Molecule` class to store a list of atoms.
 
 A simple `Atom` class may look like the following:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Atom:
     def __init__(self, name, symbol, number, mass, coordinates):
         self.name = name
@@ -63,8 +68,9 @@ class Atom:
         self.number = number
         self.mass = mass
         self.coordinates = coordinates
-~~~
-{: .language-python}
+```
+````
+
 
 Given this `Atom` class, we have a few possibilities for incorporating it into the Molecule class.
 We could try and make the `symbols`, `coordinates`, and `atoms` variables optional and rely on keyword arguments to properly assign them in the constructor.
@@ -72,13 +78,16 @@ Alternatively we could utilize inheritance to extend the behavior of the `Molecu
 
 To do so, we can create a new class called `AtomMolecule`.
 First, let us look at just the class definition and the constructor.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class AtomMolecule(Molecule):
     def __init__(self, name, charge, atoms):
         self.atoms = atoms
         super().__init__(name, charge, self.symbols, self.coordinates)
-~~~
-{: .language-python}
+```
+````
+
 
 Notice that after the class name, we have now included `(Molecule)`.
 Python uses the above syntax to specify inheritance.
@@ -94,17 +103,22 @@ Even though we are inheriting from `Molecule`, `AtomMolecule` has no understandi
 A solution to this is to add a setter and property for atoms so we can control how `atoms` is updated.
 When `atoms` is updated, we need to update both `symbols` and `coordinates`.
 Here is one option for how to generate the values for `symbols`:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 def _update_symbols(self):
         list_symbols = []
         for atom in self.atoms:
             list_symbols.append(atom.symbol)
         self._symbols = list_symbols
-~~~
-{: .language-python}
+```
+````
+
 which iterates through each atom and appends the symbol to the list.
 Adding a similar function for `coordinates` creates the complete class.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class AtomMolecule(Molecule):
     def __init__(self, name, charge, atoms):
         self.atoms = atoms
@@ -131,27 +145,34 @@ class AtomMolecule(Molecule):
         for atom in self.atoms:
             list_coordinates.append(atom.coordinates)
         self.coordinates = list_coordinates
-~~~
-{: .language-python}
+```
+````
+
 
 To test it we can create a set of atoms to pass into an `AtomMolecule`:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 oxygen = Atom("oxygen", "O", 8, 15.999, [0,0,0])
 hydrogen1 = Atom("hydrogen", "H", 1, 1.00784, [0,1,0])
 hydrogen2 = Atom("hydrogen", "H", 1, 1.00784, [0,0,1])
 
 mol1 = AtomMolecule(name='water molecule', charge=0.0, atoms=[oxygen, hydrogen1, hydrogen2])
 print(mol1)
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 name: water molecule
 charge: 0.0
 symbols: ['O', 'H', 'H']
 coordinates: [[0, 0, 0], [0, 1, 0], [0, 0, 1]]
 number of atoms: 3
-~~~
-{: .language-output}
+```
+````
+
 
 We can see in the output that `AtomMolecule` is correctly printing out the contents of the molecule, but we have not defined a `__str__()` method.
 Since `AtomMolecule` is inheriting from `Molecule`, it is inheriting all of the methods defined in `Molecule`.
@@ -177,3 +198,9 @@ This is an example of aggregation.
 The `AtomMolecule` object is using the `Atoms`, but it does not have ownership of them.
 
 If, instead, we had the `Molecule` class create atoms from the set of symbols and coordinates, the `Molecule` class would own the `Atoms`, which would be an example of composition.
+````{admonition} Key Points
+:class: key
+
+- Parent vs Child classes
+- 
+````

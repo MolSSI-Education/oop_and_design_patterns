@@ -1,18 +1,17 @@
----
-title: 'Composite Design Pattern'
-teaching: 30
-exercises: 0
-questions:
-- 'How can an object notify its own state to an open-ended number of objects?'
-keypoints:
-- 'The composite design pattern provides a way for manipulating a tree data structure'
-objectives:
-- 'Show an example of the composite design pattern relavant to the Computational Molecular Sciences domain.' 
-- 'Understand the composite design pattern.'
-questions:
-- 'How to compose objects into tree structures?'
-- 'How to define a common interface for branches and leaves within a tree?'
----
+# Composite Design Pattern
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How to compose objects into tree structures?
+- How to define a common interface for branches and leaves within a tree?
+
+Objectives:
+- Understand the composite design pattern.
+- Show an example of the composite design pattern relavant to the Computational Molecular Sciences domain.
+````
+
 
 
 ## Problem
@@ -64,7 +63,9 @@ as parent for the branch and leaf elements. In our example, a
 Component class would be an abstraction for patchy particles (leaves)
 and clusters (branches).
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from abc import ABC, abstractmethod
 
 class Component(ABC):
@@ -76,14 +77,17 @@ class Component(ABC):
     def translate(self):
         pass
 
-~~~
-{: .language-python}
+```
+````
+
 
 2. Leaf. These are objects that have no children. They implement methods 
 described by the Component parent class. LJ particles, 
 Gay Berne or any other type of particle might serve as leaf objects.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Sphere(Component):
 
     '''A Sphere is a type of particle, for instance,
@@ -102,13 +106,16 @@ class Gay_Berne(Component):
 
     def translate(self):
         print('translating gay berne')
-~~~
-{: .language-python}
+```
+````
+
 
 3. Branch. This element stores child components and implement methods
 defined by the component interface.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Cluster(Component):
 
     '''A cluster is a collection of particles. It can
@@ -125,13 +132,16 @@ class Cluster(Component):
 
     def add_particle(self, particle):
         self._particles.append(particle)
-~~~
-{: .language-python}
+```
+````
+
 
 4. Client code. The code that manipulate objects in the hierarchy using
 the interface defined by Component. 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 def main():
 
     argon = Sphere()
@@ -150,5 +160,11 @@ def main():
 if __name__ == "__main__":
     main()
 
-~~~
-{: .language-python}
+```
+````
+
+````{admonition} Key Points
+:class: key
+
+- The composite design pattern provides a way for manipulating a tree data structure
+````

@@ -1,17 +1,16 @@
----
-title: 'Factory Design Pattern'
-teaching: 30
-exercises: 0
-questions:
-- 'How can a method or class defer instantiation to subclasses?'
-objectives:
-- 'Learn the factory design pattern.'
-- 'See an example of the factory design pattern relavant to the Computational Molecular Sciences domain.'
-keypoints:
-- 'A factory allows writing subclasses that change the way an object
-is created.'
-- 'Factories promote SOLID design principles, enforcing code to be designed towards an interface instead of towards a specific class.'
----
+# Factory Design Pattern
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How can a method or class defer instantiation to subclasses?
+
+Objectives:
+- Learn the factory design pattern.
+- See an example of the factory design pattern relavant to the Computational Molecular Sciences domain.
+````
+
 
 ## Definition
 
@@ -33,7 +32,9 @@ The factory design pattern suggests to replace direct object construction calls
 A factory works best when the different constructed classes work from a shared base class, this allows code to use any object produced by the factory in the same way, without even knowing the type of the object they posses.
 
 We restate the two adapter classes here for easier viewing:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class MDAnalysisAdapter(TrajectoryAdapter):
     def __init__(self, filename):
         self.trajectory = mda.Universe(filename)
@@ -50,10 +51,13 @@ class MDAnalysisAdapter(TrajectoryAdapter):
         for ts in self.trajectory.trajectory:
             rg_by_frame[ts.frame] = self.trajectory.atoms.radius_of_gyration()
         return rg_by_frame
-~~~
-{: .language-python}
+```
+````
 
-~~~
+
+````{tab-set-code} 
+
+```{code-block} python
 class MDTrajAdapter(TrajectoryAdapter):
     def __init__(self, filename):
         self.trajectory = md.load_pdb(filename)
@@ -64,28 +68,37 @@ class MDTrajAdapter(TrajectoryAdapter):
 	
     def compute_radius_of_gyration(self):
         return 10 * md.compute_rg(self.trajectory)
-~~~
-{: .language-python}
+```
+````
+
 
 First we will want to create a new module for our factory, called `factory.py`.
 We need to first import our adapter abstract class so our factory knows which type of objects it is building.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from trajectoryAdapter import TrajectoryAdapter
 from mdanalysis_adapter import MDAnalysisAdapter
 from mdtraj_adapter import MDTrajAdapter
-~~~
-{: .language-python}
+```
+````
+
 
 Then we create a factory class that will act as our factory. This class will hold a few functions going forward. First and foremost is the factory method, which will take in a toolkit name (the library we want to use) and a filename to initialize an adapter.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class MDFactory:
     def md_factory(self, md_toolkit, filename):
-~~~
-{: .language-python}
+```
+````
+
 There are a number of ways we can handle this method, the first way will simply use a series of if statements to determine which adapter needs to be used.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class MDFactory:
     def md_factory(self, md_toolkit, filename):
         if md_toolkit == 'MDTraj':
@@ -94,10 +107,13 @@ class MDFactory:
             return MDAnalysisAdapter(filename)
         else:
             raise TypeError('Toolkit not found')
-~~~
-{: .language-python}
+```
+````
+
 An alternative option, that looks a little cleaner is to use dictionaries.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class MDFactory:
     def md_factory(self, md_toolkit, filename):
         toolkits = {'MDTraj': MDTrajAdapter, 'MDAnalysis': MDAnalysisAdapter}
@@ -106,13 +122,16 @@ class MDFactory:
             raise Exception('Toolkit not found.')
         cls = self._toolkits[md_toolkit]
         return cls(filename)
-~~~
-{: .language-python}
+```
+````
+
 
 Both of these options will work, however, there is a slight problem. They are very rigid and inflexible. We are using a factory so our code can remain open to further extension, further adapters being written. The current factory needs to be modified every time an adapter is written or sufficiently changed. We can solve this issue through the use of a registry.
 
 We start with the dictionary based factory, and simply move the dictionary to be an empty list, as a class variable, and update our references to it, making our module look like this:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from trajectoryAdapter import TrajectoryAdapter
 
 class MDFactory:
@@ -123,21 +142,27 @@ class MDFactory:
             raise Exception('Toolkit not found.')
         cls = self._toolkits[md_toolkit]
         return cls(filename)
-~~~
-{: .language-python}
+```
+````
+
 
 We can now create a new method that acts on this dictionary to register our toolkits.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
     def register(self, toolkit_name, toolkit_class):
         if not issubclass(toolkit_class, TrajectoryAdapter):
             raise TypeError(f'{toolkit_class} is not a TrajectoryAdapter')
         self._toolkits[toolkit_name] = toolkit_class
-~~~
-{: .language-python}
+```
+````
+
 Here we first check that the toolkit being registered is a subclass of our `TrajectoryAdapter`, this ensures that it has the proper methods implemented within it. We then simply add it to the dictionary.
 
 The final step is to register each of our toolkits into the factory as needed.. Within our ascript, we simply create a factory and utilize it for registration and getting an adapter.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from mdtraj_adapter import MDTrajAdapter
 from MDAnalysisAdapter import MDAnalysisAdapter
 from factory import MDFactory
@@ -149,13 +174,22 @@ mdf.register('MDAnalysis', MDAnalysisAdapter)
 md = mdf.md_factory('MDTraj', 'protein.pdb')
 print(f'Center of mass:\n{md.compute_center_of_mass()}')
 print(f'Radius of Gyration:\n{md.compute_radius_of_gyration()}')
-~~~
-{: .language-python}
+```
+````
+
 
 Now any time a new adapter is created, it can be added to the factory and utilized with minimal impact.
 To change between which adapter is being used, the only change that needs to be made to the script is the toolkit name:
-~~~
+
+````{tab-set-code} 
+
+```{code-block} python
 #md = mdf.md_factory('MDTraj', 'protein.pdb')
 md = mdf.md_factory('MDAnalysis', 'protein.pdb')
-~~~
-{: .language-python}
+```
+````
+````{admonition} Key Points
+:class: key
+
+- A factory allows writing subclasses that change the way an object
+````

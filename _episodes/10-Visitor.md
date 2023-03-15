@@ -1,15 +1,16 @@
----
-title: 'Visitor Design Pattern'
-teaching: 30
-exercises: 0
-questions:
-- 'How to separate the methods from the objects that use them?'
-keypoints:
-- 'The visitor design pattern lets you define operations without changing the classes of the elements that use such operations.'
-objectives:
-- 'Understand the visitor design pattern.'
-- 'Show an example of the visitor design pattern relavant to the Computational Molecular Sciences domain.' 
----
+# Visitor Design Pattern
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How to separate the methods from the objects that use them?
+
+Objectives:
+- Understand the visitor design pattern.
+- Show an example of the visitor design pattern relavant to the Computational Molecular Sciences domain. 
+````
+
 
 ## Problem
 
@@ -19,7 +20,9 @@ Imagine you would like to add a solid body rotation Monte Carlo move to your pro
 As you start modifying your code, you'll realize that you need to modify your Component
 base class and each of the Patchy, Cluster and other children classes:
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from abc import ABC, abstractmethod
 
 class Component(ABC):
@@ -77,8 +80,9 @@ class Cluster(Component):
     def add_particle(self, particle):
         self._particles.append(particle)
 
-~~~
-{: .language-python}
+```
+````
+
 
 Each time we need to add a new move, we will need to change all the existing Particle
 classes to add that new move. This might become unpractical the more derived classes you have.
@@ -94,7 +98,9 @@ that will be used by the visitable clases. In our example, the Visitor abstract 
 will be an abstract Move_Type class that will contain the abstract methods for translation
 and rotation. 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Move_Type(ABC):
 
     @abstractmethod
@@ -108,8 +114,9 @@ class Move_Type(ABC):
     @abstractmethod
     def cluster(self):
         pass
-~~~
-{: .language-python}
+```
+````
+
 
 
 2. Concrete visitor: This implements the abstract class. We need to define a
@@ -117,7 +124,9 @@ concrete visitor for each type of visitor. For instance, a concrete visitor woul
 a "Translator" class, which will define the translation methods for each type
 of particle, as defined by its parent class.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Translator(Move_Type):
     def sphere(self, sphere):
         print('Translating sphere should be very straightforward')
@@ -129,13 +138,16 @@ class Translator(Move_Type):
         print('Translating cluster should involve COM computation and subsequent translation')
         for particle in cluster.particles:
             print('Translating particle', particle) 
-~~~
-{: .language-python}
+```
+````
+
 
 For a rotation move, we need to create another class that implements the rotation
 routines for each type of particle. 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Rotator(Move_Type):
     def sphere(self, sphere):
         print('Rotating sphere is nonsense due to rotation invariance')
@@ -147,8 +159,9 @@ class Rotator(Move_Type):
         print('Rotating cluster using Eulerian angles')
         for particle in cluster.particles:
             print('Rotating particle', particle) 
-~~~
-{: .language-python}
+```
+````
+
 
 Adding a new move would simply involve creating a new class and, for each type of particle, 
 defining the method that would correctly handle the transformation for that particular
@@ -160,7 +173,9 @@ the rotation move for a sphere).
 object to be visited. In our example this would simply be an abtract Component 
 class that defines a generic transform method.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Component(ABC):
 
     '''Base class for a Particle. Particles
@@ -169,8 +184,9 @@ class Component(ABC):
     @abstractmethod
     def move(self, transformer):
         pass
-~~~
-{: .language-python}
+```
+````
+
 
 4. Concrete Visitable: A class that implement the method defined by Visitable. Note
 that the visitor object is an argument that is passed to the generic function transform. This 
@@ -182,7 +198,9 @@ instance, the Translator.sphere method needs an instance
 of the Sphere class. This instance is provided in Sphere.move class by the object self, which
 represent the current object instance.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Sphere(Component):
 
     '''A Sphere is a type of particle, for instance, 
@@ -199,15 +217,18 @@ class Gay_Berne(Component):
 
     def move(self, transformer):
         transformer.gay_berne(self) 
-~~~
-{: .language-python}
+```
+````
+
 
 5. Object Structure. This is a class containing all the objects that can be
    visited. It offers a mechanism to iterate through all the elements. 
 In can be a complex structure, such
 as a composite object
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Cluster(Component):
 
     '''A cluster is a collection of particles. It can
@@ -222,12 +243,15 @@ class Cluster(Component):
 
     def add_particle(self, particle):
         self.particles.append(particle)
-~~~
-{: .language-python}
+```
+````
+
 
 Finally, the client code that uses the aforementioned classes is
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 def main():
 
     translate = Translator()
@@ -255,8 +279,9 @@ def main():
 
 if __name__ == "__main__":
     main()
-~~~
-{: .language-python}
+```
+````
+
 
 ## Implementation in Python
 
@@ -264,7 +289,9 @@ As a dynamic language, Python offers functionality that ends up simplifying
 and sometimes nullyfing the need for design patterns as described in the
 classic book Design Patterns: Elements of Object-Oriented Software. For instance, the visitor pattern can be implemented in Python as
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Particle:
 
     '''Base class for a Particle. Particles
@@ -364,5 +391,11 @@ def main():
 if __name__ == "__main__":
     main()
 
-~~~
-{: .language-python}
+```
+````
+
+````{admonition} Key Points
+:class: key
+
+- The visitor design pattern lets you define operations without changing the classes of the elements that use such operations.
+````

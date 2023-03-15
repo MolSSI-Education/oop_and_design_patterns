@@ -1,15 +1,16 @@
----
-title: "Facade Design Pattern"
-teaching: 30
-exercises: 0
-questions:
-- "How can we simplify the interface to a subsystem?"
-objectives:
-- "Learn the Facade Design Pattern."
-- "See an example of the Facade Design Pattern relavant to the Computational Molecular Sciences domain."
-keypoints:
-- "A Facade is used to obfuscate the complexity of a subsystem behind a simple interface."
----
+# Facade Design Pattern
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How can we simplify the interface to a subsystem?
+
+Objectives:
+- Learn the Facade Design Pattern.
+- See an example of the Facade Design Pattern relavant to the Computational Molecular Sciences domain.
+````
+
 The Facade design pattern is used to simplify the interface to a subsystem.
 
 ![facade](../fig/Facade.png)
@@ -20,16 +21,21 @@ In addition, we want to use computations from a number of different packages, co
 We will use the Facade design pattern to hide the complexity of the computation behind a simple, easy to use interface.
 
 Like with the Adapter design pattern, we need to import the packages we wish to use.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 import numpy as np
 import MDAnalysis
 import mdtraj as md
-~~~
-{: .language-python}
+```
+````
+
 
 We then consider the classes we are using to perform our computations.
 For simplicity, we will use slightly modified versions of the Adapter classes from the Adapter design pattern example.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class MDAnalysisTrajectoryHandler:
     def __init__(self, filename):
         self.trajectory = MDAnalysis.Universe(filename)
@@ -56,42 +62,58 @@ class MDTrajTrajectoryHandler:
 
     def compute_radius_of_gyration(self):
         return 10 * md.compute_rg(self.trajectory)
-~~~
-{: .language-python}
+```
+````
+
 If we wanted to use various functions to perform our compute workflow, we would need to construct an object of each class and execute the relevant methods.
 Instead, we are going to construct a Facade to handle it for us.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class TrajectoryAnalyzer:
     def __init__(self, filename):
         self.mda = MDAnalysisTrajectoryHandler(filename)
         self.mdt = MDTrajTrajectoryHandler(filename)
-~~~
-{: .language-python}
+```
+````
+
 The constructor for our Facade takes a filename, the path to the PDB file, and creates and instance of each Handler.
 Since we have a consistent workflow that we want to use, we will create a function that executes it based on the given input file.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
     def analysis(self):
         results = {}
         results['MDAnalysis_center_of_mass'] = self.mda.compute_center_of_mass()
         results['MDTraj_radius_of_gyration'] = self.mdt.compute_radius_of_gyration()
         return results
-~~~
-{: .language-python}
+```
+````
+
 The analysis function executes our workflow on the trajectory and returns a dictionary.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 trajectory_analysis = TrajectoryAnalyzer('protein.pdb')
 print(trajectory_analysis.analysis())
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 {'MDAnalysis_center_of_mass': array([[26.7681786 , 23.59642783, 25.03328876],
        [26.53426535, 24.03365348, 25.02487714],
        [27.35982618, 24.40054767, 24.91184063]]), 'MDTraj_radius_of_gyration': array([12.05981914, 12.17911312, 12.1806974 ])}
-~~~
-{: .output}
-{% include links.md %}
+```
+````
 
 [MDAnalysis]: https://www.mdanalysis.org/
 [MDTraj]: http://mdtraj.org/1.9.0/
 [NumPy]: http://www.numpy.org/
 [abc]: https://docs.python.org/3/library/abc.html
+````{admonition} Key Points
+:class: key
+
+- A Facade is used to obfuscate the complexity of a subsystem behind a simple interface.
+````

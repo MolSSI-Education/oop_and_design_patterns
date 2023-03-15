@@ -1,16 +1,15 @@
----
-title: "Introduction"
-teaching: 0
-exercises: 0
-questions:
-- "What are Design Patterns?"
-objectives:
-- "A brief introduction to the types of Design Patterns."
-keypoints:
-- "Design patterns are solutions to common problems in software design."
----
+# Introduction
 
-{% include links.md %}
+````{admonition} Overview
+:class: overview
+
+Questions:
+- What are Design Patterns?
+
+Objectives:
+- A brief introduction to the types of Design Patterns.
+````
+
 
 Design patterns are solutions to commonly found problems in software design. They are tested paradigms for how to solve a recurring problem. Patterns allow to speed up software development and provide a uniform communication mechanism among developers.
 
@@ -22,3 +21,8 @@ There are various types of patterns:
 to compose objects to form larger structures and obtain new functionality.
 
 3) Behavioral: they are concerned with the assignment of responsibilities between objects and the communicaton between objects or classes. 
+````{admonition} Key Points
+:class: key
+
+- Design patterns are solutions to common problems in software design.
+````

@@ -1,17 +1,16 @@
----
-title: "Object Oriented Programming"
-teaching: 0
-exercises: 0
-questions:
-- "What is Object Oriented Programming?"
-- "Why should I use Object Oriented Programming?"
-objectives:
-- "Understand the concepts behind Object Oriented Programming."
-keypoints:
-- ""
----
+# Object Oriented Programming
 
-{% include links.md %}
+````{admonition} Overview
+:class: overview
+
+Questions:
+- What is Object Oriented Programming?
+- Why should I use Object Oriented Programming?
+
+Objectives:
+- Understand the concepts behind Object Oriented Programming.
+````
+
 ## Object Oriented Programming
 Object Oriented Programming (OOP) is a style of programming that promotes the creation of objects to contain data and methods.
 Codes developed using OOP will contain a set of objects that interact with one another.
@@ -34,3 +33,4 @@ Four main concepts of OOP covered in these lessons are:
 This introduction will briefly cover each of these concepts and why they are useful to a software developer.
 
 For further reading on Object Oriented Programming in Python, consider this [tutorial](https://www.python-course.eu/python3_object_oriented_programming.php) or the Python3 documentation found [here](https://docs.python.org/3/tutorial/classes.html).
+

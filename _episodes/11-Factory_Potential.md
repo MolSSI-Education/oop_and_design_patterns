@@ -1,17 +1,16 @@
----
-title: 'Factory Design Pattern Second Example'
-teaching: 30
-exercises: 0
-questions:
-- 'How can a method or class defer instantiation to subclasses?'
-objectives:
-- 'Learn the factory design pattern.'
-- 'See an example of the factory design pattern relavant to the Computational Molecular Sciences domain.'
-keypoints:
-- 'A factory allows writing subclasses that change the way an object
-is created.'
-- 'Factories promote SOLID design principles, enforcing code to be designed towards an interface instead of towards a specific class.'
----
+# Factory Design Pattern Second Example
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How can a method or class defer instantiation to subclasses?
+
+Objectives:
+- Learn the factory design pattern.
+- See an example of the factory design pattern relavant to the Computational Molecular Sciences domain.
+````
+
 
 ## Definition
 
@@ -30,7 +29,9 @@ Lennard-Jones potential and the Buckingham potential.
 You implement such functional forms using the following classes:
 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class LJ:
    def __init__(self, epsilon, sigma):
        self.sigma = sigma
@@ -49,8 +50,9 @@ class Buckingham:
    def get_energy(self, r):
        return self.A * np.exp(-r / self.rho) - self.C / r**6
 
-~~~
-{: .language-python}
+```
+````
+
 
 You quickly realize that you should design your code such that is extensible to
 many different functional forms. Although you could have a class that defines
@@ -69,7 +71,9 @@ and hides the implementation of the potential classes.
 	
 The factory method for our simulation potentials could look like:
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 def potential_factory(potential_type, **kwargs):
     if potential_type == 'LJ':
         return LJ(**kwargs)
@@ -79,16 +83,20 @@ def potential_factory(potential_type, **kwargs):
 
     else:
         raise Exception('Potential type not found')
-~~~
-{: .language-python}
+```
+````
+
 
 In this way, our client code can call our factory class as follows:
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 buckingham_potential = potential_factory('Buckingham', A=4.0, rho=10.0, C=10)
 energy = buckingham_potential.get_energy(r=10.0)
-~~~
-{: .language-python}
+```
+````
+
 
 We have created a common interface (the factory  method) that returns potential
 objects given a chosen keyword (i.e. Buckingham or LJ).
@@ -100,7 +108,9 @@ class that forces the implementation of an abstract method to its children
 classes
 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 from abc import ABC, abstractmethod
 
 
@@ -108,8 +118,9 @@ class Potential(ABC):
    @abstractmethod
    def get_energy(self):
        pass
-~~~
-{: .language-python}
+```
+````
+
 
 If we make our LJ and Buckingham  classes children of the Potential class, we
 force them to implement the get_energy method and thus our factory would return
@@ -124,12 +135,15 @@ usability of our library by adding the following checks in the potential
 constructors to make sure we input the right number of parameters and we use
 the desired keywords:
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 for key in kwargs:
     if key not in ['epsilon', 'sigma']:
         raise KeyError('LJ potential: Must input epsilon and sigma')
-~~~
-{: .language-python}
+```
+````
+
 
 We can write a similar piece of code for the Buckingham potential.
 
@@ -138,7 +152,9 @@ We can write a similar piece of code for the Buckingham potential.
 The final version of our code is
 
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 
 from abc import ABC, abstractmethod
 import numpy as np
@@ -192,14 +208,17 @@ def potential_factory(potential_type, **kwargs):
 buck_potential = potential_factory('Buckingham', A=4.0, rho=10.0, C=10)
 energy = buck_potential.get_energy(r=10.0)
 
-~~~
-{: .language-python}
+```
+````
+
 
 ## Alternative implementation of the factory method
 
 Instead of using a set of if statements, we could use a Python dictionary to implement the same functionality as follows
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 def potential_factory(potential_type, **kwargs):
    cls_dict = dict(LJ=LJ, Buckingham=Buckingham)
 
@@ -210,8 +229,9 @@ def potential_factory(potential_type, **kwargs):
 
    cls_instance = cls(**kwargs)
    return cls_instance
-~~~
-{: .language-python}
+```
+````
+
 
 The first line of our function creates a dictionary whose values are classes of
 potentials. Note that these have not been instantiated yet. After an if
@@ -222,7 +242,11 @@ provided arguments (i.e. sigma or epsilon for LJ or A, C and rho for
 Buckingham).
 
 One advantage of using dictionaries over if statements is that they can be
-[coupled with a registry]
-(http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
+[coupled with a registry](http://scottlobdell.me/2015/08/using-decorators-python-automatic-registration/)
 and make the construction of the dictionary automatic and improve the
 extensibility of the potential library. 
+````{admonition} Key Points
+:class: key
+
+- 'A factory allows writing subclasses that change the way an object
+````

@@ -1,15 +1,16 @@
----
-title: 'Observer Design Pattern'
-teaching: 30
-exercises: 0
-questions:
-- 'How can an object notify its own state to an open-ended number of objects?'
-objectives:
-- 'Learn the observer design pattern.'
-- 'See an example of the observer design pattern relavant to the Computational Molecular Sciences domain.'
-keypoints:
-- 'The observer design pattern provides a way for the subject to notify an open-ended number of objects about its own state'
----
+# Observer Design Pattern
+
+````{admonition} Overview
+:class: overview
+
+Questions:
+- How can an object notify its own state to an open-ended number of objects?
+
+Objectives:
+- Learn the observer design pattern.
+- See an example of the observer design pattern relavant to the Computational Molecular Sciences domain.
+````
+
 
 ## Definition
 
@@ -39,7 +40,9 @@ The subject knows about its observers and provides an interface for
 attaching and detaching observers. We can create an abstract base clase
 for defining all subjects as:
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Subject:
     def __init__(self):
         self._observers = []
@@ -55,14 +58,17 @@ class Subject:
     def notify(self):
         for observer in self._observers:
             observer.update(self)
-~~~
-{: .language-python}
+```
+````
+
 
 Now, we need the actual concrete subject that our observers will look at. For our
 case, it could be our simulation system (i.e. all particles). Thus, we need to
 define a concrete subject that inherits from our abstract subject class
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class System(Subject):
 
     def __init__(self, mol_number=0):
@@ -90,26 +96,32 @@ class System(Subject):
     def compute_energy(self):
         # Ideally we would implement a full energy computation
         self.energy = np.random.rand()
-~~~
-{: .language-python}
+```
+````
+
 
 
 Additionally, we need a base class for all observers. It should require a
 function that retrieves what the observer knows about the subject.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Observer(ABC):
 
     @abstractmethod
     def update(self, subject):
         pass
-~~~
-{: .language-python}
+```
+````
+
 
 And now we can implement two concrete observers: one that retrieves the Cartesian coordinates
 and another that gets the energy.
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class XYZ_observer(Observer):
 
     def __init__(self, print_freq=1):
@@ -131,14 +143,17 @@ class energy_observer(Observer):
         if subject.current_step % self.print_freq == 0:
             print('Printing energy', subject.energy)
 
-~~~
-{: .language-python}
+```
+````
+
 
 
 Now, you could use the above classes in your Monte Carlo client code
 like this
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 # Create the system with a desired number of particles
 mc_system = System(mol_number=15)
 
@@ -155,14 +170,17 @@ for this_mcstep in range(total_mcsteps):
     # that alter the state of the system and
     # don't violate detailed balance!
     mc_system.xyz += 0.1
-~~~
-{: .language-python}
+```
+````
+
 
 ## Final code
 
 The final version of our code is
 
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 
 from abc import ABC, abstractmethod
 import numpy as np
@@ -256,6 +274,12 @@ for this_mcstep in range(total_mcsteps):
     mc_system.xyz += 0.1
 
 
-~~~
-{: .language-python}
+```
+````
 
+
+````{admonition} Key Points
+:class: key
+
+- The observer design pattern provides a way for the subject to notify an open-ended number of objects about its own state
+````

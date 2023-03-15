@@ -1,18 +1,16 @@
----
-title: "Abstraction"
-teaching: 0
-exercises: 0
-questions:
-- "What is Abstraction?"
-- "Why should I care about Data Abstraction?"
-objectives:
-- "Understand the concepts behind Data Abstraction."
-keypoints:
-- "Public vs Private variables and methods"
-- "Python syntax for private variables and methods"
----
+# Abstraction
 
-{% include links.md %}
+````{admonition} Overview
+:class: overview
+
+Questions:
+- What is Abstraction?
+- Why should I care about Data Abstraction?
+
+Objectives:
+- Understand the concepts behind Data Abstraction.
+````
+
 ## Abstraction
 
 Abstraction is the concept of hiding implementation details from the user, allowing them to know how to use the code/class without knowing how it actually works or any implementation details.
@@ -36,7 +34,9 @@ However, the predominantly accepted practice is to treate names prefixed with an
 Making data private is a way to protect a user from creating errors by hiding sensitive variables.
 We can utilize our previously defined `Molecule` class to provide an example.
 `Molecule` is currently defined as:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -46,8 +46,9 @@ class Molecule:
 		
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}'
-~~~
-{: .language-python}
+```
+````
+
 
 We would like to provide users with a way to determine the number of atoms present in the molecule.
 There are a few ways to accomplish this behavior.
@@ -61,7 +62,9 @@ However, lets consider this as an example where re-generating every time it is n
 In this case, we want to store the number of atoms so we can simply reference it as needed.
 
 As a first attempy, why don't we just add a new variable to the `__init__` method that infers the value based on the list of symbols.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -73,17 +76,23 @@ class Molecule:
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
 
-~~~
-{: .language-python}
+```
+````
+
 Recreating our two molecules using the new class and printing them, we get the following code and output:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"], coordinates=[[0,0,0],[0,1,0],[0,0,1]])
 mol2 = Molecule(name="He", charge=0.0, symbols=["He"], coordinates=[[0,0,0]])
 print(mol1)
 print(mol2)
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 name: water molecule
 charge: 0.0
 symbols: ['O', 'H', 'H']
@@ -94,23 +103,30 @@ charge: 0.0
 symbols: ['He']
 coordinates: [[0, 0, 0]]
 number of atoms: 1
-~~~
-{: .lanuage-output}
+```
+````
+
 So far so good, but what if the list of symbols needs to change?
 For the sake of the example, we will update the list of symbols to remove a hydrogen.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 mol1.symbols = ["O", "H"]
 print(mol1)
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 name: water molecule
 charge: 0.0
 symbols: ['O', 'H']
 coordinates: [[0, 0, 0], [0, 1, 0], [0, 0, 1]]
 number of atoms: 3
-~~~
-{: .language-output}
+```
+````
+
 
 We can see that, though the list of symbols has properly updated, the number of atoms did not change.
 
@@ -121,7 +137,9 @@ These allow attributes to be used in a pythonic way, while allowing more control
 
 We want to update the `num_atoms` variable whenever the value of `symbols` is updated.
 We can do this by creating a property and setter method for the 'symbols' variable.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -140,8 +158,9 @@ class Molecule:
 
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
-~~~
-{: .language-python}
+```
+````
+
 To utilize the `property` decorator, we preempt a method with `@` followed by the decorator name.
 The specific method used should have the same name as the variable we want the user to reference, in this case `symbols`.
 Notice that the `symbols()` method is referencing a variable called `_symbols`, remember that prefacing a variable with an underscore infroms the user they should not edit this variable.
@@ -155,20 +174,26 @@ In this case, we are setting the value of `_symbols` to the value provided by th
 Note that we can remove the line that sets `num_atoms` from the constructor, as that will automatically occur when `symbols` is set.
 
 If we recreate `mol1` and attempt to edit its `symbols` now we should see a different result:
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"], coordinates=[[0,0,0],[0,1,0],[0,0,1]])
 mol1.symbols = ["O", "H"]
 print(mol1)
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 name: water molecule
 charge: 0.0
 symbols: ['O', 'H']
 coordinates: [[0, 0, 0], [0, 1, 0], [0, 0, 1]]
 number of atoms: 2
-~~~
-{: .language-output}
+```
+````
+
 
 Now, whenever someone tries to access 'symbols', it will properly return the value stored in our private variable.
 When someone tries to update the value of symbols directly, it will update the private variable, and also update the 'num_atoms' variable.
@@ -180,7 +205,9 @@ To include private methods in a class, we similarly preempt the method name with
 
 For the sake of showing a simple example, let us assume that updating the value of `num_atoms` is a much more complicated procedure than it is under the current definition of `Molecule`.
 Since we want to keep the content of the `symbols` setter method fairly straightforward and easy to understand, we create a helper method to handle the updating of `num_atoms`.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -202,8 +229,9 @@ class Molecule:
 
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
-~~~
-{: .language-python}
+```
+````
+
 Now when a user updates the value of `symbols`, python will call the *private* method `_update_num_atoms()`, which will correctly update the number of atoms stored in the object.
 In this instance it is not necessary to hide the method `_update_num_atoms()` as no harm will occur if it is directly called, but it works as a useful example of how a method can be hidden.
 
@@ -211,19 +239,27 @@ In this instance it is not necessary to hide the method `_update_num_atoms()` as
 For the previous sections, we have utilized python conventions to make our variables private.
 By prefacing a variable or method with and underscore, `_`, we are telling any users not to directly interact with the variable or method.
 However, if we look at the dictionary of the object, we can see that they are still accessible and users may try and use them.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 print(dir(mol1))
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_symbols', '_update_num_atoms', 'charge', 'coordinates', 'name', 'num_atoms', 'symbols']
-~~~
-{: .language-output}
+```
+````
+
 
 Python allows us to further hide them through a process called name mangling.
 To apply name mangling to a variable or method, simply preface a value with two underscores `__`.
 Let us try and apply name mangling to both the `_symbols` variable and the `_update_num_atoms` method.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 class Molecule:
     def __init__(self, name, charge, symbols, coordinates):
         self.name = name
@@ -245,18 +281,31 @@ class Molecule:
 
     def __str__(self):
         return f'name: {self.name}\ncharge: {self.charge}\nsymbols: {self.symbols}\ncoordinates: {self.coordinates}\nnumber of atoms: {self.num_atoms}'
-~~~
-{: .language-python}
+```
+````
+
 We can then recreate `mol1` and check its dictionary.
-~~~
+````{tab-set-code} 
+
+```{code-block} python
 mol1 = Molecule(name='water molecule', charge=0.0, symbols=["O", "H", "H"], coordinates=[[0,0,0],[0,1,0],[0,0,1]])
 print(dir(mol1))
-~~~
-{: .language-python}
-~~~
+```
+````
+
+````{tab-set-code} 
+
+```{code-block} output
 ['_Molecule__symbols', '_Molecule__update_num_atoms', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'charge', 'coordinates', 'name', 'num_atoms', 'symbols']
-~~~
-{: .language-output}
+```
+````
+
 We can now see that both the private variable and method have been renamed internally and prefaced with their class name: `_Molecule__symbols` and `_Molecule__update_num_atoms`.
 Though they are still visible, this further pushes them behind a layer of obfuscation, strongly suggesting to any user that they should not directly interact with these values.
 This is as close to making data private as python will currently allow.
+````{admonition} Key Points
+:class: key
+
+- Public vs Private variables and methods
+- Python syntax for private variables and methods
+````
