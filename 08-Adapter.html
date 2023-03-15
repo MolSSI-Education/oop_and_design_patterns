@@ -1,0 +1,915 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Adapter Design Pattern &#8212; molssi_best_practices  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '08-Adapter';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Factory Design Pattern" href="09-Factory.html" />
+    <link rel="prev" title="Introduction" href="07-introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/molssi_main_logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/molssi_main_logo_inverted_white.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+    <p class="title logo__title">MolSSI Object Oriented Programming and Design Patterns</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="00-section1.html">
+                        Object Oriented Programming
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="00-section2.html">
+                        Design Patterns
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/jchen0506/molssi_doc_theme" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="00-section1.html">
+                        Object Oriented Programming
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="00-section2.html">
+                        Design Patterns
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/jchen0506/molssi_doc_theme" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="07-introduction.html">Introduction</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Adapter Design Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09-Factory.html">Factory Design Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10-Visitor.html">Visitor Design Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="11-Factory_Potential.html">Factory Design Pattern Second Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="12-Facade.html">Facade Design Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="13-Observer.html">Observer Design Pattern</a></li>
+<li class="toctree-l1"><a class="reference internal" href="14-Composite.html">Composite Design Pattern</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="00-section2.html" class="nav-link">Design Patterns</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Adapter Design Pattern</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="adapter-design-pattern">
+<h1>Adapter Design Pattern<a class="headerlink" href="#adapter-design-pattern" title="Permalink to this heading">#</a></h1>
+<div class="overview admonition">
+<p class="admonition-title">Overview</p>
+<p>Questions:</p>
+<ul class="simple">
+<li><p>How can we utilize pre-existing code without modifying it?</p></li>
+</ul>
+<p>Objectives:</p>
+<ul class="simple">
+<li><p>Learn the Adapter Design Pattern.</p></li>
+<li><p>See an example of the Adapter Design Pattern relavant to the Computational Molecular Sciences domain.</p></li>
+</ul>
+</div>
+<p>The Adapter design pattern is a method of constructing a wrapper around a pre-existing interface to allow its use by another class.
+We can construct an individual adapter for a specific class, or create an abstract interface to base our adapter on.
+An abstract interface will allow us to swap out our adapter for any class that inherits from the interface.</p>
+<p>An adapter is most useful in two differenct scenarios.
+The first is when you would like to re-use pre-existing code that has been rigorously tested without modifying it and thus invalidating the tests.
+The second is when you would like to create code that cares more about getting correct results for a set of inputs than how those results are generated.
+You may want to create a set of libraries that can generate the results, but you do not want to re-write your main class to suit each new library.
+The structure of an Adapter is shown in the figure below.
+<img alt="adapter" src="_images/Adapter.png" /></p>
+<p>As an example, consider the situation where we would like to read a Molecular Dynamics (MD) trajectory from a PDB file and perform some analysis on it.
+We currently have an MD library in mind to use, but we may want to use one or more different libraries in the future.
+If we do not want to re-write our code for each individual library, we need to come up with a different solution, in this case it will be to create an adapter.
+We will use two MD libraries, <a class="reference external" href="https://www.mdanalysis.org/">MDAnalysis</a> and <a class="reference external" href="http://mdtraj.org/1.9.0/">MDTraj</a> in this example. Our goal is to create a code that uses MDTraj or MDAnalysis to perform some simple analysis on a trajectory file. To keep the runtime short, we will only use the center of mass and the radius of gyration from each code, but the concepts shown will apply to more in depth computations.
+A sample trajectory file to use was provided in PDB form in the Setup instructions.
+We will also be using <a class="reference external" href="http://www.numpy.org/">NumPy</a> to structure some of our data.</p>
+<section id="trajectory-analysis-script">
+<h2>Trajectory Analysis Script<a class="headerlink" href="#trajectory-analysis-script" title="Permalink to this heading">#</a></h2>
+<p>To start, let us consider how we would these libraries without an adapter. We would first pick a library to start with, in this case MDTraj.
+We begin by importing the libraries we want to use.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-0">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mdtraj</span> <span class="k">as</span> <span class="nn">mdt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To load a PDB file in MDTraj, we use the <code class="docutils literal notranslate"><span class="pre">load_pdb</span></code> function. We can then use the functions from MDTraj to perform our two computations.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-1" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-1">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">mdt</span><span class="o">.</span><span class="n">load_pdb</span><span class="p">(</span><span class="s1">&#39;protein.pdb&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Center of mass: </span><span class="se">\n</span><span class="si">{</span><span class="n">mdt</span><span class="o">.</span><span class="n">compute_center_of_mass</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Radius of Gyration: </span><span class="se">\n</span><span class="si">{</span><span class="n">mdt</span><span class="o">.</span><span class="n">compute_rg</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Running this script should provide the following output:</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-2" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-output" for="sd-tab-item-2">
+OUTPUT</label><div class="sd-tab-content docutils">
+<div class="highlight-output notranslate"><div class="highlight"><pre><span></span><span class="go">Center of mass:</span>
+<span class="go">[[2.67682053 2.3596378  2.50332589]</span>
+<span class="go"> [2.65342927 2.40336034 2.5024845 ]</span>
+<span class="go"> [2.73598621 2.44005027 2.49118094]]</span>
+<span class="go">Radius of Gyration:</span>
+<span class="go">[1.20598191 1.21791131 1.21806974]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let us consider that we want to change the library we are using for analysis. Let us quickly change the code to use MDAnalysis to load the PDB and perform our two computations.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-3" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-3">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#import mdtraj as mdt</span>
+<span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">mda</span>
+
+<span class="c1">#trajectory = mdt.load_pdb(&#39;protein.pdb&#39;)</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s1">&#39;protein.pdb&#39;</span><span class="p">)</span>
+
+<span class="c1">#print(mdt.compute_center_of_mass(trajectory))</span>
+<span class="c1">#print(mdt.compute_rg(trajectory))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Center of mass: </span><span class="se">\n</span><span class="si">{</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">center_of_mass</span><span class="p">(</span><span class="n">compound</span><span class="o">=</span><span class="s2">&quot;segments&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Radius of Gyration: </span><span class="se">\n</span><span class="si">{</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">radius_of_gyration</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The first thing to notice is that the two libraries handle the operations very differently. The function definitions are completely distinct from one another. Any code that is utilizing the center of mass and radius of gyration from MDTraj may have to make significant changes to update the analysis library.
+Lets take a look at the output of the above code.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-4" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-4">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Center</span> <span class="n">of</span> <span class="n">mass</span><span class="p">:</span>
+<span class="p">[[</span><span class="mf">26.7681786</span>  <span class="mf">23.59642783</span> <span class="mf">25.03328876</span><span class="p">]]</span>
+<span class="n">Radius</span> <span class="n">of</span> <span class="n">Gyration</span><span class="p">:</span>
+<span class="mf">11.90080870784717</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that not only are the function definitions different, both the output structure and the units are different. MDTraj is outputting in nanometers and MDAnalysis is using Ångströms. Lets use Ångströms moving forward, but we want the same output structure from MDTraj. We will need a little help from <a class="reference external" href="http://www.numpy.org/">NumPy</a>, so be sure to import it.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-5" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-5">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#import mdtraj as mdt</span>
+<span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">mda</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#trajectory = mdt.load_pdb(&#39;protein.pdb&#39;)</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="s1">&#39;protein.pdb&#39;</span><span class="p">)</span>
+
+<span class="c1">#print(mdt.compute_center_of_mass(trajectory))</span>
+<span class="c1">#print(mdt.compute_rg(trajectory))</span>
+
+<span class="n">mass_by_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">:</span>
+    <span class="n">mass_by_frame</span><span class="p">[</span><span class="n">ts</span><span class="o">.</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">center_of_mass</span><span class="p">(</span><span class="n">compound</span><span class="o">=</span><span class="s1">&#39;segments&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Center of mass: </span><span class="se">\n</span><span class="si">{</span><span class="n">mass_by_frame</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">rg_by_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">:</span>
+    <span class="n">rg_by_frame</span><span class="p">[</span><span class="n">ts</span><span class="o">.</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">radius_of_gyration</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Radius of Gyration: </span><span class="se">\n</span><span class="si">{</span><span class="n">rg_by_frame</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This will provide us with the output in the desired form.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-6" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-output" for="sd-tab-item-6">
+OUTPUT</label><div class="sd-tab-content docutils">
+<div class="highlight-output notranslate"><div class="highlight"><pre><span></span><span class="go">Center of mass:</span>
+<span class="go">[[26.7681786  23.59642783 25.03328876]</span>
+<span class="go"> [26.53426535 24.03365348 25.02487714]</span>
+<span class="go"> [27.35982618 24.40054767 24.91184063]]</span>
+<span class="go">Radius of Gyration:</span>
+<span class="go">[11.90080871 12.02935585 12.03777011]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This was a very simple script, but replacing the libraries has cost us a fair bit of effort. If we had put some thought into it from the beginning, we could have created an abstraction layer to protect our code from changes like these. This is where the adapter design pattern will come in.</p>
+</section>
+<section id="trajectory-adapter">
+<h2>Trajectory Adapter<a class="headerlink" href="#trajectory-adapter" title="Permalink to this heading">#</a></h2>
+<p>Based on SOLID design principles, we want to code towards an interface, not a specific class, so we want to create an interface to base our adapters on.
+We will use Python’s <a class="reference external" href="https://docs.python.org/3/library/abc.html">abc</a> module to help build the interface, so we will need to import it and build our interface. We create a new file called <code class="docutils literal notranslate"><span class="pre">trajectoryAdapter.py</span></code> to hold our adapter.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-7" name="sd-tab-set-7" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-7">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span><span class="p">,</span> <span class="n">ABC</span>
+
+<span class="k">class</span> <span class="nc">TrajectoryAdapter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">compute_center_of_mass</span><span class="p">():</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">compute_radius_of_gyration</span><span class="p">():</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Inheriting from ABC and decorating the methods with <code class="docutils literal notranslate"><span class="pre">&#64;abstractmethod</span></code> ensures that any subclass of TrajectoryAdapter must override both methods.
+Any code developed using the listed abstract methods from the interface will now work with any adapter we construct that inherits from <code class="docutils literal notranslate"><span class="pre">TrajectoryAdapter</span></code>.</p>
+<blockquote>
+<div><h2 class="rubric" id="inheritance">Inheritance</h2>
+<p>Inheritance is the principle of extending a class to add capabilities without modifying the original class.
+We call the class that is being inherited the parent, and the class that is inheriting the child.
+The child class obtains the properties and behaviors of its parent unless it overrides them.
+{: .callout}</p>
+</div></blockquote>
+</section>
+<section id="mdtraj-adapter">
+<h2>MDTraj Adapter<a class="headerlink" href="#mdtraj-adapter" title="Permalink to this heading">#</a></h2>
+<p>We will start by building an Adapter that utilizes MDTraj. We create a new file called <code class="docutils literal notranslate"><span class="pre">mdtra_adapter.py</span></code>. Remember to import the adapter and mdtraj.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-8" name="sd-tab-set-8" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-8">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">trajectoryAdapter</span> <span class="kn">import</span> <span class="n">TrajectoryAdapter</span>
+<span class="kn">import</span> <span class="nn">mdtraj</span> <span class="k">as</span> <span class="nn">mdt</span>
+
+<span class="k">class</span> <span class="nc">MDTrajAdapter</span><span class="p">(</span><span class="n">TrajectoryAdapter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">load_pdb</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Selected MDTraj.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we define the class with a constructor that takes in the name of our PDB file.
+We construct a trajectory object by using the <code class="docutils literal notranslate"><span class="pre">load_pdb(filename)</span></code> method from the MDTraj library.
+To help determine that we are using the correct adapter, we include a simple print statement informing the User that the MDTraj library is selected.</p>
+<p>Since both methods in <code class="docutils literal notranslate"><span class="pre">TrajectoryAdapter</span></code> are abstract methods, we must override them.
+First we will implement the <code class="docutils literal notranslate"><span class="pre">compute_center_of_mass</span></code> function.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-9" name="sd-tab-set-9" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-9">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">compute_center_of_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">md</span><span class="o">.</span><span class="n">compute_center_of_mass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We utilize the <code class="docutils literal notranslate"><span class="pre">compute_center_of_mass</span></code> from MDTraj with our trajectory.
+Our code is interested in performing these calculations using Ångströms, but MDTraj uses nanometers, so we need to do a quick conversion of our results.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-10" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-10">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">compute_radius_of_gyration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">md</span><span class="o">.</span><span class="n">compute_rg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We similarly implement the <code class="docutils literal notranslate"><span class="pre">compute_radius_of_gyration</span></code> method and perform the unit conversion.</p>
+<p>We can now use our MDTrajAdapter to calculate the center of mass and radius of gyration of a given trajectory.
+Using the sample trajectory, we edit our script to use the adapter.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-11" name="sd-tab-set-11" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-11">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mdtraj_adapter</span> <span class="kn">import</span> <span class="n">MDTrajAdapter</span>
+
+<span class="n">mda</span> <span class="o">=</span> <span class="n">MDTrajAdapter</span><span class="p">(</span><span class="s1">&#39;protein.pdb&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Center of mass:</span><span class="se">\n</span><span class="si">{</span><span class="n">mda</span><span class="o">.</span><span class="n">compute_center_of_mass</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Radius of Gyration:</span><span class="se">\n</span><span class="si">{</span><span class="n">mda</span><span class="o">.</span><span class="n">compute_radius_of_gyration</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-12" name="sd-tab-set-12" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-output" for="sd-tab-item-12">
+OUTPUT</label><div class="sd-tab-content docutils">
+<div class="highlight-output notranslate"><div class="highlight"><pre><span></span><span class="go">Selected MDTraj.</span>
+<span class="go">Center of mass:</span>
+<span class="go"> [[26.76820533 23.59637797 25.03325893]</span>
+<span class="go"> [26.53429267 24.03360343 25.02484501]</span>
+<span class="go"> [27.35986206 24.40050269 24.91180938]]</span>
+<span class="go">Radius of Gyration:</span>
+<span class="go"> [12.05981914 12.17911312 12.1806974 ]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="mdanalysis-adapter">
+<h2>MDAnalysis Adapter<a class="headerlink" href="#mdanalysis-adapter" title="Permalink to this heading">#</a></h2>
+<p>Now we would like to change our code to use the MDAnalysis library, ideally with minimal impact on our script, which is simulating a larger code.
+Let us construct another Adapter for MDAnalysis. Create a new file called <code class="docutils literal notranslate"><span class="pre">mdanalysis_adapter.py</span></code> and include the imports.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-13" name="sd-tab-set-13" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-13">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">trajectoryAdapter</span> <span class="kn">import</span> <span class="n">TrajectoryAdapter</span>
+<span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">mda</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">MDAnalysisAdapter</span><span class="p">(</span><span class="n">TrajectoryAdapter</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">MDAnalysis</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Selected MDAnalysis.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we define the class with a constructor that takes in the name of our PDB file.
+We construct a trajectory object by using the <code class="docutils literal notranslate"><span class="pre">Universe(filename)</span></code> method from the MDAnalysis library.</p>
+<p>Since both methods in <code class="docutils literal notranslate"><span class="pre">TrajectoryAdapter</span></code> are abstract methods, we must override them.
+First we will implement the <code class="docutils literal notranslate"><span class="pre">compute_center_of_mass</span></code> function.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-14" name="sd-tab-set-14" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-14">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">compute_center_of_mass</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mass_by_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">:</span>
+            <span class="n">mass_by_frame</span><span class="p">[</span><span class="n">ts</span><span class="o">.</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">center_of_mass</span><span class="p">(</span><span class="n">compound</span><span class="o">=</span><span class="s1">&#39;segments&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mass_by_frame</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Since our code is looking for an ndarray from NumPy, we need to ensure that the return type of the functions using MDAnalysis are also in ndarrays.
+We would like to see the result returned as a 2-dimensional array of tuples containing the coordinates of the center of mass in each frame, so we construct our array using NumPy.
+We then iterate through the timesteps of our trajectory and calculate the center of mass of the atoms during that frame, adding the result to our array.</p>
+<p>We will similarly implement the <code class="docutils literal notranslate"><span class="pre">compute_radius_of_gyration</span></code> function.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-15" name="sd-tab-set-15" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-15">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">compute_radius_of_gyration</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">rg_by_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">trajectory</span><span class="p">:</span>
+            <span class="n">rg_by_frame</span><span class="p">[</span><span class="n">ts</span><span class="o">.</span><span class="n">frame</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">radius_of_gyration</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">rg_by_frame</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is important to notice that the constructor and the method calls have the same definition as those in the MDTraj and perform the same operations, with the same return types, but do so in a different way.
+To an external class, the two Adapters are now interchangable.
+We will update our script to use the MDAnalysisAdapter instead.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-16" name="sd-tab-set-16" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-python" for="sd-tab-item-16">
+PYTHON</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#from mdtraj_adapter import MDTrajAdapter</span>
+<span class="kn">from</span> <span class="nn">mdanalysys_adapter</span> <span class="kn">import</span> <span class="n">MDAnalysisAdapter</span>
+
+<span class="c1">#mda = MDTrajAdapter(&#39;protein.pdb&#39;)</span>
+<span class="n">mda</span> <span class="o">=</span> <span class="n">MDAnalysisAdapter</span><span class="p">(</span><span class="s1">&#39;protein.pdb&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Center of mass:</span><span class="se">\n</span><span class="si">{</span><span class="n">mda</span><span class="o">.</span><span class="n">compute_center_of_mass</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Radius of Gyration:</span><span class="se">\n</span><span class="si">{</span><span class="n">mda</span><span class="o">.</span><span class="n">compute_radius_of_gyration</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-17" name="sd-tab-set-17" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-output" for="sd-tab-item-17">
+OUTPUT</label><div class="sd-tab-content docutils">
+<div class="highlight-output notranslate"><div class="highlight"><pre><span></span><span class="go">Selected MDAnalysis</span>
+<span class="go">Center of mass:</span>
+<span class="go">[[26.7681786  23.59642783 25.03328876]</span>
+<span class="go"> [26.53426535 24.03365348 25.02487714]</span>
+<span class="go"> [27.35982618 24.40054767 24.91184063]]</span>
+<span class="go">Radius of Gyration:</span>
+<span class="go">[11.90080871 12.02935585 12.03777011]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With adapters for each library, our code is not concerned with how the data it needs is generated, simply that it follows the contract put in place by the interface.</p>
+<div class="key admonition">
+<p class="admonition-title">Key Points</p>
+<ul class="simple">
+<li><p>An Adapter allows a class to be used as another interface, without modifying the original class.</p></li>
+<li><p>Adapters promote SOLID design principles, enforcing code to be designed towards an interface instead of towards a specific class.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07-introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09-Factory.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Factory Design Pattern</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectory-analysis-script">Trajectory Analysis Script</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trajectory-adapter">Trajectory Adapter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mdtraj-adapter">MDTraj Adapter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mdanalysis-adapter">MDAnalysis Adapter</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="_sources/08-Adapter.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  
+
+
+
+  
+  
+  
+  
+  
+  
+  
+
+
+<div class="row h-10">
+    <div class="col-2">
+        <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+            <img src="_static/molssi_main_logo.png" class="logo__image only-light footer_logo" alt="Logo image">
+            <img src="_static/molssi_main_logo_inverted_white.png" class="logo__image only-dark footer_logo" alt="Logo image">
+        </a>
+    </div>
+    <div class="col-8">
+        <p> &copy; Copyright 2019-2023 <a href="https://molssi.org/">The Molecular Sciences Software Institute</a></p>
+        <p>Funded by the National Science Foundation 
+          <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1547580">OAC-1547580</a> and 
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2136142">CHE-2136142.</a></p>
+ 
+        
+        <p class="sphinx-version">
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+        </p>
+        
+
+        <p class="theme-version">
+        Built with a customized <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
+        </p>
+
+    </div>
+    <div class="col-2">
+        <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+            <img src="_static/nsf.png" class="footer_logo" alt="The NSF">
+          </a>
+    </div>
+</div></div>
+      
+    </div>
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>
