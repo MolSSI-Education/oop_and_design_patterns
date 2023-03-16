@@ -26,7 +26,7 @@ from abc import ABC, abstractmethod
 ```
 ````
 
-`ABC`{: .language-python} is the abstract base class.
+`ABC` is the abstract base class.
 Inheriting from the abstract base class enforces that any child classes of the abstract class must have some implementation of any abstract methods.
 ````{tab-set-code} 
 
