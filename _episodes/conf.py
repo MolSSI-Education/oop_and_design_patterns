@@ -26,7 +26,7 @@ import os
 import sys
 # -- Project information -----------------------------------------------------
 
-project = 'molssi_best_practices'
+project = 'MolSSI Object Oriented Programming and Design Patterns'
 author = 'The Molecular Sciences Software Institute'
 
 # The short X.Y version
