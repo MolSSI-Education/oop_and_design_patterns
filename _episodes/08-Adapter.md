@@ -147,7 +147,7 @@ This was a very simple script, but replacing the libraries has cost us a fair bi
 ## Trajectory Adapter 
 
 Based on SOLID design principles, we want to code towards an interface, not a specific class, so we want to create an interface to base our adapters on.
-We will use Python's [abc] module to help build the interface, so we will need to import it and build our interface. We create a new file called `trajectoryAdapter.py` to hold our adapter.
+We will use Python's [abc] module to help build the interface, so we will need to import it and build our interface. We create a new file called `trajectory_adapter_.py` to hold our adapter.
 ````{tab-set-code} 
 
 ```{code-block} python
@@ -175,16 +175,16 @@ Any code developed using the listed abstract methods from the interface will now
 
 ## MDTraj Adapter
 
-We will start by building an Adapter that utilizes MDTraj. We create a new file called `mdtra_adapter.py`. Remember to import the adapter and mdtraj.
+We will start by building an Adapter that utilizes MDTraj. We create a new file called `mdtraj_adapter.py`. Remember to import the adapter and mdtraj.
 ````{tab-set-code} 
 
 ```{code-block} python
-from trajectoryAdapter import TrajectoryAdapter
+from trajectory_adapter import TrajectoryAdapter
 import mdtraj as mdt
 
 class MDTrajAdapter(TrajectoryAdapter):
     def __init__(self, filename):
-        self.trajectory = md.load_pdb(filename)
+        self.trajectory = mdt.load_pdb(filename)
         print('Selected MDTraj.')
 ```
 ````
@@ -200,7 +200,7 @@ First we will implement the `compute_center_of_mass` function.
 
 ```{code-block} python
     def compute_center_of_mass(self):
-        return 10 * md.compute_center_of_mass(self.trajectory)
+        return 10 * mdt.compute_center_of_mass(self.trajectory)
 ```
 ````
 
@@ -210,7 +210,7 @@ Our code is interested in performing these calculations using &#197;ngstr&#246;m
 
 ```{code-block} python
     def compute_radius_of_gyration(self):
-        return 10 * md.compute_rg(self.trajectory)
+        return 10 * mdt.compute_rg(self.trajectory)
 ```
 ````
 
@@ -250,13 +250,13 @@ Let us construct another Adapter for MDAnalysis. Create a new file called `mdana
 ````{tab-set-code} 
 
 ```{code-block} python
-from trajectoryAdapter import TrajectoryAdapter
+from trajectory_adapter import TrajectoryAdapter
 import MDAnalysis as mda
 import numpy as np
 
 class MDAnalysisAdapter(TrajectoryAdapter):
     def __init__(self, filename):
-        self.trajectory = MDAnalysis.Universe(filename)
+        self.trajectory = mda.Universe(filename)
         print('Selected MDAnalysis.')
 ```
 ````
@@ -301,7 +301,7 @@ We will update our script to use the MDAnalysisAdapter instead.
 
 ```{code-block} python
 #from mdtraj_adapter import MDTrajAdapter
-from mdanalysys_adapter import MDAnalysisAdapter
+from mdanalysis_adapter import MDAnalysisAdapter
 
 #mda = MDTrajAdapter('protein.pdb')
 mda = MDAnalysisAdapter('protein.pdb')
