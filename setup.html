@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Setup &#8212; MolSSI Object Oriented Programming and Design Patterns  documentation</title>
+    <title>Computer Set Up &#8212; MolSSI Object Oriented Programming and Design Patterns  documentation</title>
   
   
   
@@ -164,7 +164,7 @@
     
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Setup
+                        Computer Set Up
                       </a>
                     </li>
                 
@@ -301,7 +301,7 @@ document.write(`
     
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
-                        Setup
+                        Computer Set Up
                       </a>
                     </li>
                 
@@ -420,7 +420,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Setup</li>
+    <li class="breadcrumb-item active" aria-current="page">Computer Set Up</li>
   </ul>
 </nav>
 </div>
@@ -437,53 +437,131 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="setup">
-<h1>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h1>
-<div class="overview admonition">
-<p class="admonition-title">Overview</p>
-<p>Questions:</p>
+  <section id="computer-set-up">
+<h1>Computer Set Up<a class="headerlink" href="#computer-set-up" title="Link to this heading">#</a></h1>
+<p>Completing this tutorial requires installing software and setting up a Python environment.
+If you are doing any kind of code development and are on Windows, we recommend installing the Windows Subsytem for Linux.</p>
+<div class="attention admonition">
+<p class="admonition-title">Windows users take note</p>
+<p>If you are working on a Windows computer,
+participation in this workshop will require you to install the Windows Subsystem for Linux (WSL).
+You should install WSL 2, you will need to have the Windows 10 or Windows 11 OS with the following version requirements:</p>
 <ul class="simple">
-<li><p>How do I setup my computer for the lessons?</p></li>
+<li><p>For x64 systems: Version 1903 or higher, with Build 18362 or higher.</p></li>
+<li><p>For ARM64 systems: Version 2004 or higher, with Build 19041 or higher.</p></li>
 </ul>
-<p>Objectives:</p>
-<ul class="simple">
-<li><p>Install anaconda for creating virtual environments.</p></li>
-<li><p>Install lesson requirements in a conda environment.</p></li>
-<li><p>Obtain lesson example materials.</p></li>
-</ul>
+<p>If you haven’t updated your computer in a while,
+these updates could take a considerable amount of time.
+Plan accordingly!</p>
+<p>If you are on Windows 11, you can also <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps">set up WSL to be able to use graphical interfaces</a>.</p>
+<p>As an alternative to WSL, or in addition to it, you can setup and use a Docker container to follow along with the workshop.</p>
 </div>
-<section id="installing-python-through-anaconda">
-<h2>Installing Python through Anaconda<a class="headerlink" href="#installing-python-through-anaconda" title="Link to this heading">#</a></h2>
-<p><a class="reference external" href="https://python.org/">Python</a> is a popular language for scientific computing, and great for general-purpose programming as well. Installing all of its scientific packages individually can be a bit difficult, however, so we recommend the all-in-one installer Anaconda.</p>
-<p>Regardless of how you choose to install it, <em>please make sure you install Python version 3.x (e.g., 3.4 is fine, 2.7 is not)</em>.  Also, please set up your python environment at least a day in advance of the workshop. If you encounter problems with the installation procedure, the instructors will be available 30 minutes before the workshop begins to help you.</p>
-</section>
-<section id="windows-video-tutorial">
-<h2>Windows - <a class="reference external" href="https://www.youtube.com/watch?v=xxQ0mzZ8UvA">Video Tutorial</a><a class="headerlink" href="#windows-video-tutorial" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Open the <a class="reference external" href="https://www.anaconda.com/download/#windows">Anaconda Windows download page</a>.</p></li>
-<li><p>Download the installer.  <strong>Be sure you get the Python 3 version.</strong></p></li>
-<li><p>Double-click the installer icon and follow the setup instructions on screen.  You can use MOST of the default options.  The only exception is to check the <strong>Make Anaconda the default Python</strong> option.</p></li>
-</ol>
-</section>
-<section id="mac-os-x-video-tutorial">
-<h2>Mac OS X - <a class="reference external" href="https://www.youtube.com/watch?v=TcSAln46u9U">Video Tutorial</a><a class="headerlink" href="#mac-os-x-video-tutorial" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>Open the <a class="reference external" href="https://www.anaconda.com/download/#macos">Anaconda MacOS download page</a>.</p></li>
-<li><p>Download the installer. <strong>Be sure you get the Python 3 version.</strong></p></li>
-<li><p>Double click the installer icon and follow the setup instructions.  You can use all of the default options.</p></li>
-</ol>
-</section>
-<section id="obtain-lesson-materials">
-<h2>Obtain lesson materials<a class="headerlink" href="#obtain-lesson-materials" title="Link to this heading">#</a></h2>
-<p>We are utilizing two Molecular Dynamics packages to show examples of some of the design patterns.
-[MDanalysis] and [MDTraj] are both available through conda-forge.</p>
-<p>To start, open an Anaconda prompt.
-Then enter</p>
+<p>Please follow the instructions given here to make sure you have the necessary software installed.
+We will be using Python and the conda package manager.
+If you are on MacOS, Linux, or WSL and you already have Anaconda (or Miniconda) installed,
+skip to the environment creation portion of these set-up instructions.
+If you do not have Anaconda or Miniconda installed please see the appropriate section below.
+<strong>Note</strong> If you are on Windows Miniconda has to be installed on WSL (not Windows).
+This might be a separate installation.</p>
+<div class="info admonition">
+<p class="admonition-title">Anaconda vs. Minconda</p>
+<p>Anaconda is a distribution of Python, the conda package manager, and several third-party libraries that are commonly used in data science.
+Miniconda contains only Python and the conda package manager. You will be able to install any package you would like later using Miniconda.
+Miniconda will take up a lot less space on your computer.
+We will be learning to manage conda environments and install the packages we need, so we consider Miniconda to be the better option between the two.
+If you already have Anaconda installed, however, there is no need to install Miniconda.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Ensure that your conda version is up-to-date</p>
+<p>If you already have <code class="docutils literal notranslate"><span class="pre">conda</span></code> installed using Anaconda or Miniconda,
+you should make sure your <code class="docutils literal notranslate"><span class="pre">conda</span></code> version is up-to-date.<br />
+Ensuring you have an up-to-date version of <code class="docutils literal notranslate"><span class="pre">conda</span></code> will ensure that you are more easily able to install the packages we will be using in this workshop.</p>
 <div class="sd-tab-set docutils">
 <input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
 </input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-0">
 SHELL</label><div class="sd-tab-content docutils">
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>design_patterns<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>update<span class="w"> </span>-n<span class="w"> </span>base<span class="w"> </span>conda
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<section id="installing-wsl-windows-users-only">
+<h2>Installing WSL (Windows users only)<a class="headerlink" href="#installing-wsl-windows-users-only" title="Link to this heading">#</a></h2>
+<p>If your computer uses the Windows operating system, we require installing Windows Subsystem for Linux (WSL).
+Follow the installation instructions at <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/install">this link</a>.
+If you don’t have a preference for Linux distribution, we recommend installing Ubuntu 22.04.</p>
+<p>Once WSL is installed, open your ‘Start’ menu and choose ‘Ubuntu’.
+This will open a terminal window.
+A terminal is an interface you can use to interact with your computer using text.
+The first time you open Ubuntu, you may see a message which says “Installing, this may take a few minutes…”.
+After the installation is done, you will have to create a username and password.
+After these are created, you should be able to use the terminal.</p>
+<p>The Windows Subsystem for Linux is like running another computer inside your computer.
+It is a different operating system with different software installed than your Windows computer.
+For the WSL, you have to install Miniconda from the terminal in your Linux operating system.
+Note that if you are using the WSL,
+your Linux OS is completely separated from your Windows operating system.
+This means that software installed on one operating system is not available on the other.
+If you are running the Windows 11 operating system,
+you can <a class="reference external" href="https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps">set up WSL to use graphical interfaces on your computer</a>.
+Otherwise, you will only be able to interact with WSL through the terminal (and the text editor VSCode,
+see later in the set-up for information on how to use VS Code in WSL).</p>
+</section>
+<section id="miniconda-installation">
+<h2>Miniconda Installation<a class="headerlink" href="#miniconda-installation" title="Link to this heading">#</a></h2>
+<p>You can install Miniconda through a graphical interface or using your terminal.
+Pick either “Graphical Installation” or “Text-based (terminal) Installation”.
+<strong>If you are using WSL, it may be easiest to complete this using the terminal installation.</strong></p>
+<section id="graphical-installation">
+<h3>Graphical Installation<a class="headerlink" href="#graphical-installation" title="Link to this heading">#</a></h3>
+<p>Obtain the latest version of Miniconda for your OS at this <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">link</a>.
+This will download an installer you can run to install Miniconda on your system.
+Note that if you are using WSL, you will need the <strong>Linux</strong> installer,
+and you will have to move this file to WSL before running.</p>
+</section>
+<section id="text-based-terminal-installation">
+<h3>Text-based (terminal) Installation<a class="headerlink" href="#text-based-terminal-installation" title="Link to this heading">#</a></h3>
+<p>You can also use the terminal to download and install the Miniconda compilers using the terminal.
+If you are using Linux or WSL, type the following into your terminal.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-1" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-1">
+SHELL</label><div class="sd-tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-O<span class="w"> </span>https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash<span class="w"> </span>Miniconda3-latest-Linux-x86_64.sh
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you are using a Mac, you should pick the appropriate link for your architecture from the Miniconda installer page.</p>
+<p>M1: https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh<br />
+x86: https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh</p>
+<p>After installation,
+close and reopen your terminal window.
+If you do not see <code class="docutils literal notranslate"><span class="pre">(base)</span></code> before your username on the command line, type</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-2" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-2">
+SHELL</label><div class="sd-tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>init
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="make-lesson-environment">
+<h2>Make Lesson Environment<a class="headerlink" href="#make-lesson-environment" title="Link to this heading">#</a></h2>
+<p>We are utilizing two Molecular Dynamics packages to show examples of some of the design patterns.
+<a class="reference external" href="https://www.mdanalysis.org">MDanalysis</a> and <a class="reference external" href="http://mdtraj.org">MDTraj</a> are both available through conda-forge.</p>
+<p>To start, open an Anaconda prompt.
+Then enter</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-3" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-3">
+SHELL</label><div class="sd-tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>design_patterns<span class="w"> </span><span class="s2">&quot;python=3.11&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -491,41 +569,69 @@ SHELL</label><div class="sd-tab-content docutils">
 <p>Enter <code class="docutils literal notranslate"><span class="pre">Y</span></code> to continue.</p>
 <p>We now need to activate our new environment.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-1" name="sd-tab-set-1" type="radio">
-</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-1">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-4" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-4">
 SHELL</label><div class="sd-tab-content docutils">
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>design_patterns
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>design_patterns
 </pre></div>
 </div>
 </div>
 </div>
 <p>Then we will install MDAnalysis and MDTraj.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-2" type="radio">
-</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-2">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-5" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-5">
 SHELL</label><div class="sd-tab-content docutils">
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mdanalysis
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mdanalysis<span class="w"> </span>mdtraj<span class="w"> </span>numpy
 </pre></div>
 </div>
 </div>
 </div>
-<div class="sd-tab-set docutils">
-<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-3" type="radio">
-</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-3">
-SHELL</label><div class="sd-tab-content docutils">
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mdtraj
-</pre></div>
-</div>
-</div>
-</div>
+</section>
+<section id="downloading-workshop-materials">
+<h2>Downloading Workshop Materials<a name="materials_download"></a><a class="headerlink" href="#downloading-workshop-materials" title="Link to this heading">#</a></h2>
 <p>We have included a sample trajectory file to use with the example design patterns.
-The [trajectory] was extracted from the [MDAnalysisTests]</p>
-<p>{% include links.md %}
-[trajectory]: ./data/protein.pdb
-[MDAnalysisTests]: https://pypi.org/project/MDAnalysisTests/
-[MDAnalysis]: https://www.mdanalysis.org/
-[MDTraj]: http://mdtraj.org/1.9.0/
-[NumPy]: http://www.numpy.org/</p>
+The <a class="reference internal" href="#./data/protein.pdb"><span class="xref myst">provided trajectory</span></a> was extracted from the <a class="reference external" href="https://pypi.org/project/MDAnalysisTests/">MDAnalysisTests</a></p>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/cec56ed8ee53f3295fe8ab600a3a427c/protein.pdb"><code class="xref download docutils literal notranslate"><span class="pre">Starting</span> <span class="pre">materials</span> <span class="pre">for</span> <span class="pre">lesson</span></code></a>.</p></li>
+</ul>
+</section>
+<section id="text-editor">
+<h2>Text Editor<a class="headerlink" href="#text-editor" title="Link to this heading">#</a></h2>
+<p>Everyone should have a text editor they can use to edit code.
+If you do not have a preference for text editors, we recommend <a class="reference external" href="https://code.visualstudio.com/">Visual Studio Code</a>.
+If you are using WSL, see <a class="reference external" href="https://code.visualstudio.com/docs/remote/wsl">these instructions</a> for installing Visual Studio Code for use with WSL.
+If you are using Mac, follow <a class="reference external" href="https://code.visualstudio.com/docs/setup/mac#:~:text=Launching%20from%20the%20command%20line,code'%20command%20in%20PATH%20command.">these instructions</a> to set-up VS Code so that you can use it from the command line.</p>
+<div class="tip admonition">
+<p class="admonition-title">Remote Development Extension (for WSL or ssh)</p>
+<p>The <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">Remote Development Extension</a> will allow you to connect to remote machines (like an HPC system) and use VS Code as if it were running on your local machine.
+This can be <strong>very</strong> useful for computational scientists.</p>
+<p>Note that if you are using WSL, you will <em>have</em> to install this extension to use VS Code with WSL.
+This is in the <a class="reference external" href="https://code.visualstudio.com/docs/remote/wsl">above linked instructions</a>.</p>
+</div>
+<p>When using VSCode with the Python extension, you will want to have it use the correct Python version and installation for analyzing your code.
+You will want it to use the Python installation and packages that are installed in the <code class="docutils literal notranslate"><span class="pre">design_patterns</span></code> environment you created earlier.</p>
+<p>To set the Python interpreter for VSCode, first open a Python file using the editor.
+In order to change the Python interpreter, you will need to have a Python file open.
+Open a Python file called <code class="docutils literal notranslate"><span class="pre">test.py</span></code> by typing</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-6" type="radio">
+</input><label class="sd-tab-label" data-sync-id="tabcode-shell" for="sd-tab-item-6">
+SHELL</label><div class="sd-tab-content docutils">
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>code<span class="w"> </span>test.py
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once you have an editor open, you can click the button on the bottom of VSCode, shown in the screenshot below as (1) (this could also say a Python version like “3.10”).
+Alternatively, you can open the command palette (Ctrl+Shift+P on Windows/Linux, Cmd+Shift+P on Mac) and type “Python: Select Interpreter”.</p>
+<img alt="_images/vscode-button1.png" class="align-center" src="_images/vscode-button1.png" />
+<p>After you have clicked the button, you will see a list of Python interpreters that VSCode can use.
+You will want to choose the one that is in your <code class="docutils literal notranslate"><span class="pre">design_patterns</span></code> environment.</p>
+<img alt="_images/vscode-button2.png" class="align-center" src="_images/vscode-button2.png" />
+<p>You should do this for every Python file or project that you open in VSCode.
+Once you have correctly set your Python environment, VSCode can analyze your code as you write it.
+VSCode will be able to check that certain libraries are installed in your environment or that functions are being called correctly.</p>
 </section>
 </section>
 
@@ -575,10 +681,15 @@ The [trajectory] was extracted from the [MDAnalysisTests]</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-python-through-anaconda">Installing Python through Anaconda</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-video-tutorial">Windows - Video Tutorial</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mac-os-x-video-tutorial">Mac OS X - Video Tutorial</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtain-lesson-materials">Obtain lesson materials</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-wsl-windows-users-only">Installing WSL (Windows users only)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miniconda-installation">Miniconda Installation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graphical-installation">Graphical Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-based-terminal-installation">Text-based (terminal) Installation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-lesson-environment">Make Lesson Environment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-workshop-materials">Downloading Workshop Materials<a name="materials_download"></a></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#text-editor">Text Editor</a></li>
 </ul>
   </nav></div>
 
