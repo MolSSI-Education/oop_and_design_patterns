@@ -60,14 +60,14 @@ class MDAnalysisAdapter(TrajectoryAdapter):
 ```{code-block} python
 class MDTrajAdapter(TrajectoryAdapter):
     def __init__(self, filename):
-        self.trajectory = md.load_pdb(filename)
+        self.trajectory = mdt.load_pdb(filename)
         print('Selected MDTraj.')
 	
     def compute_center_of_mass(self):
-        return 10 * md.compute_center_of_mass(self.trajectory)
+        return 10 * mdt.compute_center_of_mass(self.trajectory)
 	
     def compute_radius_of_gyration(self):
-        return 10 * md.compute_rg(self.trajectory)
+        return 10 * mdt.compute_rg(self.trajectory)
 ```
 ````
 
@@ -78,7 +78,7 @@ We need to first import our adapter abstract class so our factory knows which ty
 ````{tab-set-code} 
 
 ```{code-block} python
-from trajectoryAdapter import TrajectoryAdapter
+from trajectory_adapter import TrajectoryAdapter
 from mdanalysis_adapter import MDAnalysisAdapter
 from mdtraj_adapter import MDTrajAdapter
 ```
@@ -120,7 +120,7 @@ class MDFactory:
     
         if md_toolkit not in toolkits.keys():
             raise Exception('Toolkit not found.')
-        cls = self._toolkits[md_toolkit]
+        cls = toolkits[md_toolkit]
         return cls(filename)
 ```
 ````
@@ -132,7 +132,7 @@ We start with the dictionary based factory, and simply move the dictionary to be
 ````{tab-set-code} 
 
 ```{code-block} python
-from trajectoryAdapter import TrajectoryAdapter
+from trajectory_adapter import TrajectoryAdapter
 
 class MDFactory:
     _toolkits = {}
@@ -164,7 +164,7 @@ The final step is to register each of our toolkits into the factory as needed.. 
 
 ```{code-block} python
 from mdtraj_adapter import MDTrajAdapter
-from MDAnalysisAdapter import MDAnalysisAdapter
+from mdanalysis_adapter import MDAnalysisAdapter
 from factory import MDFactory
 
 mdf = MDFactory()
